@@ -12,6 +12,7 @@
         <module name="credit-service" />
         <module name="gateway-service" />
         <module name="creditcalculate-service" />
+        <module name="common-utils" />
         <module name="client-service" />
         <module name="document-service" />
         <module name="tracking-service" />
@@ -23,6 +24,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="client-service" options="-parameters" />
       <module name="clientinfo-service" options="-parameters" />
+      <module name="common-utils" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="credit-service" options="-parameters" />
       <module name="creditcalculate-service" options="-parameters" />
