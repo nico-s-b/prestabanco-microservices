@@ -1,0 +1,47 @@
+server:
+  port: 8082
+  
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      default-zone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: client-service
+          uri: lb://client-service
+          predicates:
+            - Path=/client/**
+        - id: clientinfo-service
+          uri: lb://clientinfo-service
+          predicates:
+            - Path=/clientinfo/**
+        - id: credit-service
+          uri: lb://credit-service
+          predicates:
+            - Path=/credit/**
+        - id: document-service
+          uri: lb://document-service
+          predicates:
+            - Path=/document/**
+        - id: evaluation-service
+          uri: lb://evaluation-service
+          predicates:
+            - Path=/evaluation/**
+        - id: creditcalculate-service
+          uri: lb://creditcalculate-service
+          predicates:
+            - Path=/creditcalculate/**
+        - id: tracking-service
+          uri: lb://tracking-service
+          predicates:
+            - Path=/tracking/**                                                

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="eureka-service" />
+        <module name="config-service" />
+        <module name="evaluation-service" />
+        <module name="credit-service" />
+        <module name="gateway-service" />
+        <module name="creditcalculate-service" />
+        <module name="client-service" />
+        <module name="document-service" />
+        <module name="tracking-service" />
+        <module name="clientinfo-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="client-service" options="-parameters" />
+      <module name="clientinfo-service" options="-parameters" />
+      <module name="config-service" options="-parameters" />
+      <module name="credit-service" options="-parameters" />
+      <module name="creditcalculate-service" options="-parameters" />
+      <module name="document-service" options="-parameters" />
+      <module name="eureka-service" options="-parameters" />
+      <module name="evaluation-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
+      <module name="tracking-service" options="-parameters" />
+    </option>
+  </component>
+</project>
