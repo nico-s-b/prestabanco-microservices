@@ -1,4 +1,4 @@
-package com.example.eureka_service;
+package com.Prestabanco.eurekaservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
