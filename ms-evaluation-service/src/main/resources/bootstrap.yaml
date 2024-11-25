@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ms-evaluation-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
+  datasource:
+    url: jdbc:postgresql://localhost:5432/prestabancoms
+    username: postgres
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update

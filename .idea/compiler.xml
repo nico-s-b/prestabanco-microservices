@@ -8,34 +8,36 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-service" />
-        <module name="evaluation-service" />
+        <module name="ms-client-service" />
         <module name="config-service" />
-        <module name="credit-service" />
+        <module name="ms-evaluation-service" />
         <module name="gateway-service" />
-        <module name="creditcalculate-service" />
+        <module name="ms-document-service" />
+        <module name="ms-tracking-service" />
+        <module name="ms-credit-service" />
         <module name="common-utils" />
-        <module name="loan-type-service" />
-        <module name="client-service" />
-        <module name="document-service" />
-        <module name="tracking-service" />
-        <module name="clientinfo-service" />
+        <module name="ms-creditcalculate-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="clientinfo-service" target="21" />
+      <module name="loan-type-service" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="client-service" options="-parameters" />
       <module name="clientinfo-service" options="-parameters" />
       <module name="common-utils" options="-parameters" />
       <module name="config-service" options="-parameters" />
-      <module name="credit-service" options="-parameters" />
-      <module name="creditcalculate-service" options="-parameters" />
-      <module name="document-service" options="-parameters" />
       <module name="eureka-service" options="-parameters" />
-      <module name="evaluation-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="loan-type-service" options="-parameters" />
-      <module name="tracking-service" options="-parameters" />
+      <module name="ms-client-service" options="-parameters" />
+      <module name="ms-credit-service" options="-parameters" />
+      <module name="ms-creditcalculate-service" options="-parameters" />
+      <module name="ms-document-service" options="-parameters" />
+      <module name="ms-evaluation-service" options="-parameters" />
+      <module name="ms-tracking-service" options="-parameters" />
     </option>
   </component>
 </project>

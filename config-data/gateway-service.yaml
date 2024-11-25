@@ -16,32 +16,36 @@ spring:
       discovery:
         locator:
           enabled: true
+        default-filters:
+          - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: '*'
+            allowedMethods: "*"
+            allowedHeaders: "*"
       routes:
-        - id: client-service
-          uri: lb://client-service
+        - id: ms-client-service
+          uri: lb://ms-client-service
           predicates:
             - Path=/client/**
-        - id: clientinfo-service
-          uri: lb://clientinfo-service
-          predicates:
-            - Path=/clientinfo/**
-        - id: credit-service
-          uri: lb://credit-service
+        - id: ms-credit-service
+          uri: lb://ms-credit-service
           predicates:
             - Path=/credit/**
-        - id: document-service
-          uri: lb://document-service
+        - id: ms-document-service
+          uri: lb://ms-document-service
           predicates:
             - Path=/document/**
-        - id: evaluation-service
-          uri: lb://evaluation-service
+        - id: ms-evaluation-service
+          uri: lb://ms-evaluation-service
           predicates:
             - Path=/evaluation/**
-        - id: creditcalculate-service
-          uri: lb://creditcalculate-service
+        - id: ms-creditcalculate-service
+          uri: lb://ms-creditcalculate-service
           predicates:
             - Path=/creditcalculate/**
-        - id: tracking-service
-          uri: lb://tracking-service
+        - id: ms-tracking-service
+          uri: lb://ms-tracking-service
           predicates:
             - Path=/tracking/**                                                
