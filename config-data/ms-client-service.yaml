@@ -1,5 +1,13 @@
 server:
   port: ${PORT:${SERVER_PORT:0}}
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/prestabanco-clients
+    username: postgres
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
 eureka:
   client:
     fetch-registry: true
