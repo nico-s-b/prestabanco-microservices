@@ -1,4 +1,6 @@
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.server: DEBUG
+    org.springframework.cloud.gateway.filter: TRACE
+    org.springframework.cloud.gateway.handler: TRACE
+    reactor.netty.http.server: TRACE
