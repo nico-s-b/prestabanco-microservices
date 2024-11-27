@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/v1/eval")
+@RestController("/api/v1/evals")
 public class EvaluationController {
 
     private final ClientAccountService clientAccountService;
