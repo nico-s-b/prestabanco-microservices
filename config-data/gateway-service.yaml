@@ -26,12 +26,12 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: '*'
+            allowedOrigins: '*' #acá el front
             allowedMethods: "*"
             allowedHeaders: "*"
       routes:
         - id: ms-client-service
-          uri: lb://ms-client-service
+          uri: lb://ms-client-service   #considerar uri una palabra en mayusculas
           predicates:
             - Path=/api/v1/clients/**
             - Path=/api/v1/executives/**
