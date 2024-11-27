@@ -11,7 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>ms-evaluation-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>evaluation-service</name>
+	<name>ms-evaluation-service</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -73,7 +73,7 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
-	</dependencies>
+    </dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

@@ -16,6 +16,12 @@
         <option value="$PROJECT_DIR$/creditcalculate-service/pom.xml" />
         <option value="$PROJECT_DIR$/common-utils/pom.xml" />
         <option value="$PROJECT_DIR$/loan-type-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-client-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-credit-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-creditcalculate-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-document-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-evaluation-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-tracking-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

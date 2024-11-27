@@ -28,24 +28,25 @@ spring:
         - id: ms-client-service
           uri: lb://ms-client-service
           predicates:
-            - Path=/client/**
+            - Path=api/v1/clients/**
+            - Path=/api/auth/**
         - id: ms-credit-service
           uri: lb://ms-credit-service
           predicates:
-            - Path=/credit/**
+            - Path=api/v1/credits/**
         - id: ms-document-service
           uri: lb://ms-document-service
           predicates:
-            - Path=/document/**
+            - Path=api/v1/documents/**
         - id: ms-evaluation-service
           uri: lb://ms-evaluation-service
           predicates:
-            - Path=/evaluation/**
+            - Path=api/v1/evals/**
         - id: ms-creditcalculate-service
           uri: lb://ms-creditcalculate-service
           predicates:
-            - Path=/creditcalculate/**
+            - Path=api/v1/calculations/**
         - id: ms-tracking-service
           uri: lb://ms-tracking-service
           predicates:
-            - Path=/tracking/**                                                
+            - Path=api/v1/tracking/**

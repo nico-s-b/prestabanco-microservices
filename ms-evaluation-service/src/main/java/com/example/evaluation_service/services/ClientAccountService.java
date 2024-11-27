@@ -1,9 +1,11 @@
 package com.example.evaluation_service.services;
 
+import com.example.evaluation_service.clients.CreditFeignClient;
 import com.example.evaluation_service.entities.ClientAccount;
 import com.example.evaluation_service.entities.Credit;
 import com.example.common_utils.*;
 import com.example.evaluation_service.repositories.ClientAccountRepository;
+import feign.Client;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,19 +20,28 @@ public class ClientAccountService {
     @Autowired
     ClientAccountRepository clientAccountRepository;
 
-    public ArrayList<ClientAccount> getClientAccounts(){
+    @Autowired
+    CreditFeignClient creditFeignClient;
+
+    public ArrayList<ClientAccount> getAll(){
         return (ArrayList<ClientAccount>) clientAccountRepository.findAll();
     }
 
-    public ClientAccount getClientAccountByClient(Long id) {
+    public ClientAccount getByClientId(Long id) {
         return clientAccountRepository.findByClientId(id);
     }
 
-    public ClientAccount saveClientAccount(ClientAccount clientAccount){
+    public void create(Long clientId){
+        ClientAccount account = new ClientAccount();
+        account.setClientid(clientId);
+        clientAccountRepository.save(account);
+    }
+
+    public ClientAccount save(ClientAccount clientAccount){
         return clientAccountRepository.save(clientAccount);
     }
 
-    public ClientAccount getClientAccountById(Long id){
+    public ClientAccount getById(Long id){
         Optional<ClientAccount> optionalRecord = clientAccountRepository.findById(id);
         return optionalRecord.orElseThrow(() -> new ExecutionException("ClientAccount not found for this id :: " + id));
     }
@@ -68,48 +79,6 @@ public class ClientAccountService {
         hasR4GoodBalanceYearsRelation(credit, clientAccount);
 
         saveClientAccount(clientAccount);
-    }
-
-    //Verifica cuántas reglas cumple el cliente
-    int rulesApprovedFromSaveCapacity(ClientAccount clientAccount){
-        int rules = 0;
-
-        if (clientAccount.getR1MinimumBalance()){
-            rules++;
-        }
-        if (clientAccount.getR2ConsistentSaves()){
-            rules++;
-        }
-        if (clientAccount.getR3PeriodicDeposits()){
-            rules++;
-        }
-        if (clientAccount.getR4BalanceYearsOfAccountRelation()){
-            rules++;
-        }
-        if (clientAccount.getR5RecentWithdrawals()) {
-            rules++;
-        }
-        return rules;
-    }
-
-    //Verifica si se han evaluado todas las reglas del cliente
-    boolean hasAllRulesEvaluated(ClientAccount clientAccount){
-        if (clientAccount.getR1MinimumBalance() == null){
-            return false;
-        }
-        if (clientAccount.getR2ConsistentSaves() == null){
-            return false;
-        }
-        if (clientAccount.getR3PeriodicDeposits() == null){
-            return false;
-        }
-        if (clientAccount.getR4BalanceYearsOfAccountRelation() == null){
-            return false;
-        }
-        if (clientAccount.getR5RecentWithdrawals() == null) {
-            return false;
-        }
-        return true;
     }
 
     void evaluateSaveCapacity(ClientAccount clientAccount) {

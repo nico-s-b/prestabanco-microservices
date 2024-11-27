@@ -1,6 +1,8 @@
 package com.example.evaluation_service.services;
 
+import com.example.evaluation_service.clients.CreditFeignClient;
 import com.example.evaluation_service.entities.Credit;
+import com.example.evaluation_service.entities.CreditRecord;
 import com.example.evaluation_service.entities.EmploymentRecord;
 import com.example.evaluation_service.repositories.EmploymentRecordRepository;
 import org.hibernate.sql.exec.ExecutionException;
@@ -19,22 +21,28 @@ public class EmploymentRecordService {
     EmploymentRecordRepository employmentRecordRepository;
 
     @Autowired
-    CreditService creditService;
+    CreditFeignClient creditFeignClient;
 
     public ArrayList<EmploymentRecord> getAll(){
         return (ArrayList<EmploymentRecord>) employmentRecordRepository.findAll();
     }
 
-    public EmploymentRecord saveRecord(EmploymentRecord clientEmploymentRecord){
+    public void create(Long clientId){
+        EmploymentRecord record = new CreditRecord();
+        record.setClientid(clientId);
+        employmentRecordRepository.save(record);
+    }
+
+    public EmploymentRecord save(EmploymentRecord clientEmploymentRecord){
         return employmentRecordRepository.save(clientEmploymentRecord);
     }
 
-    public EmploymentRecord getClientEmploymentRecordById(Long id){
+    public EmploymentRecord getById(Long id){
         Optional<EmploymentRecord> optionalRecord = employmentRecordRepository.findById(id);
         return optionalRecord.orElseThrow(() -> new ExecutionException("ClientEmploymentRecord not found for this id :: " + id));
     }
 
-    public boolean deleteClientEmploymentRecord(Long id) throws Exception {
+    public boolean deleteById(Long id) throws Exception {
         try{
             employmentRecordRepository.deleteById(id);
             return true;

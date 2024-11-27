@@ -1,9 +1,10 @@
 package com.example.evaluation_service.services;
 
-import com.example.tingeso1.entities.Client;
-import com.example.tingeso1.entities.Credit;
-import com.example.tingeso1.enums.CreditState;
-import com.example.tingeso1.enums.DocumentType;
+import com.example.evaluation_service.clients.CreditFeignClient;
+import com.example.evaluation_service.entities.Client;
+import com.example.evaluation_service.entities.Credit;
+import com.example.common_utils.enums.CreditState;
+import com.example.common_utils.enums.DocumentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class CreditValidationService {
     ClientService clientService;
 
     @Autowired
-    CreditService creditService;
+    CreditFeignClient creditFeignClient;
 
     public boolean verifyMaxFinancingMount(Credit credit){
         if (credit.getCreditType() == null) {

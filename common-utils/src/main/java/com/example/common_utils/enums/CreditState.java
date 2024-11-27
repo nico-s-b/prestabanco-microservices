@@ -1,4 +1,4 @@
-package enums;
+package com.example.common_utils.enums;
 
 public enum CreditState {
     INITIALREV,

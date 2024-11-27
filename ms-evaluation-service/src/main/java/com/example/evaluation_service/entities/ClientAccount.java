@@ -1,6 +1,6 @@
 package com.example.evaluation_service.entities;
 
-import enums.SaveCapacityStatus;
+import com.example.common_utils.enums.SaveCapacityStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

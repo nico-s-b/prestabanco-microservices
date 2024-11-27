@@ -1,5 +1,6 @@
 package com.example.client_service.services;
 
+import com.example.client_service.clients.EvaluationFeignClient;
 import com.example.client_service.entities.*;
 import com.example.client_service.repositories.ClientRepository;
 import org.hibernate.sql.exec.ExecutionException;
@@ -15,6 +16,9 @@ public class ClientService {
     @Autowired
     ClientRepository clientRepository;
 
+    @Autowired
+    EvaluationFeignClient evaluationFeignClient;
+
     public List<Client> getAll() {
         return clientRepository.findAll();
     }
@@ -28,14 +32,41 @@ public class ClientService {
 
     public Client getByEmail(String email) {return clientRepository.findByEmail(email);}
 
-    public Client save(Client client){
-        return clientRepository.save(client);
+    public Client saveOrUpdate(Client client) {
+        if (client.getId() != null && !clientRepository.existsById(client.getId())) {
+            throw new ExecutionException("Client not found for this id :: " + client.getId());
+        }
+        Client savedClient = clientRepository.save(client);
+
+        if (client.getId() == null) {
+            try{
+                evaluationFeignClient.createRecords(savedClient.getId());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return savedClient;
     }
 
-    public void update(Client client){
 
+    public boolean deleteById(Long id) throws Exception {
+        try{
+            clientRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
-    public void deleteById(Long id){clientRepository.deleteById(id);}
+    public Client authenticate(String email, String password){
+        Client client = clientRepository.findByEmail(email);
+        if (client != null){
+            if (client.getPass().equals(password)){
+                return client;
+            }
+        }
+        return null;
+    }
 
 }

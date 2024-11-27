@@ -1,9 +1,11 @@
 package com.example.evaluation_service.services;
 
+import com.example.evaluation_service.clients.CreditFeignClient;
+import com.example.evaluation_service.entities.ClientAccount;
 import com.example.evaluation_service.repositories.CreditRecordRepository;
 import com.example.evaluation_service.entities.CreditRecord;
 import com.example.evaluation_service.entities.EmploymentRecord;
-import com.example.evaluation_service.entities.Credit;
+//import com.example.evaluation_service.entities.Credit;
 import com.example.evaluation_service.repositories.CreditRecordRepository;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +20,30 @@ public class CreditRecordService {
     @Autowired
     CreditRecordRepository creditRecordRepository;
     @Autowired
-    private CreditService creditService;
+    CreditFeignClient creditFeignClient;
     @Autowired
     private EmploymentRecordService employmentRecordService;
 
-    public ArrayList<CreditRecord> getClientCreditRecords(){
+    public ArrayList<CreditRecord> getAll(){
         return (ArrayList<CreditRecord>) creditRecordRepository.findAll();
     }
 
-    public CreditRecord saveClientCreditRecord(CreditRecord clientCreditRecord){
+    public void create(Long clientId){
+        CreditRecord record = new CreditRecord();
+        record.setClientid(clientId);
+        creditRecordRepository.save(record);
+    }
+
+    public CreditRecord save(CreditRecord clientCreditRecord){
         return creditRecordRepository.save(clientCreditRecord);
     }
 
-    public CreditRecord getClientCreditRecordById(Long id){
+    public CreditRecord getById(Long id){
         Optional<CreditRecord> optionalRecord = creditRecordRepository.findById(id);
         return optionalRecord.orElseThrow(() -> new ExecutionException("ClientCreditRecord not found for this id :: " + id));
     }
 
-    public boolean deleteClientCreditRecord(Long id) throws Exception {
+    public boolean deleteById(Long id) throws Exception {
         try{
             creditRecordRepository.deleteById(id);
             return true;
