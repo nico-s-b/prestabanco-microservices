@@ -10,6 +10,12 @@ eureka:
   instance:
     hostname: localhost
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "gateway,health,info"
+
 spring:
   cloud:
     gateway:
@@ -29,6 +35,7 @@ spring:
           uri: lb://ms-client-service
           predicates:
             - Path=/api/v1/clients/**
+            - Path=/api/v1/executives/**
             - Path=/api/auth/**
         - id: ms-credit-service
           uri: lb://ms-credit-service

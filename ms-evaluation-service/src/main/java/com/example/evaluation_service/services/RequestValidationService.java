@@ -1,9 +1,9 @@
 package com.example.evaluation_service.services;
 
-import com.example.evaluation_service.clients.CreditFeignClient;
+import com.example.evaluation_service.clients.CreditRequestFeignClient;
 import com.example.evaluation_service.entities.Client;
-import com.example.evaluation_service.entities.Credit;
-import com.example.common_utils.enums.CreditState;
+import com.example.evaluation_service.entities.CreditRequest;
+import com.example.common_utils.enums.CreditRequestState;
 import com.example.common_utils.enums.DocumentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 @Service
-public class CreditValidationService {
+public class RequestValidationService {
     @Autowired
     DocumentService documentService;
 
@@ -21,18 +21,18 @@ public class CreditValidationService {
     ClientService clientService;
 
     @Autowired
-    CreditFeignClient creditFeignClient;
+    CreditRequestFeignClient creditFeignClient;
 
-    public boolean verifyMaxFinancingMount(Credit credit){
-        if (credit.getCreditType() == null) {
-            throw new IllegalStateException("CreditType cannot be null");
+    public boolean verifyMaxFinancingMount(CreditRequest credit){
+        if (credit.getCreditRequestType() == null) {
+            throw new IllegalStateException("CreditRequestType cannot be null");
         }
 
-        int creditMount = credit.getCreditMount();
+        int creditMount = credit.getCreditRequestMount();
         int propertyValue = credit.getPropertyValue();
         int financingPercentage = (creditMount / propertyValue)*100;
 
-        switch (credit.getCreditType()){
+        switch (credit.getCreditRequestType()){
             case FIRSTHOME -> {
                 if (financingPercentage < 80) return true;
             }
@@ -45,49 +45,49 @@ public class CreditValidationService {
             case REMODELING -> {
                 if (financingPercentage < 50) return true;
             }
-            default -> throw new IllegalStateException("Unexpected value: " + credit.getCreditType());
+            default -> throw new IllegalStateException("Unexpected value: " + credit.getCreditRequestType());
         }
         return false;
     }
 
     //R5 Monto máximo de financiamiento
-    public boolean isCreditAmountLessThanMaxAmount(Credit credit){
-        if (credit.getCreditType() == null) {
-            throw new IllegalStateException("CreditType cannot be null");
+    public boolean isCreditRequestAmountLessThanMaxAmount(CreditRequest credit){
+        if (credit.getCreditRequestType() == null) {
+            throw new IllegalStateException("CreditRequestType cannot be null");
         }
 
-        switch (credit.getCreditType()){
+        switch (credit.getCreditRequestType()){
             case FIRSTHOME -> {
-                return credit.getCreditMount() <= credit.getPropertyValue()*0.8;
+                return credit.getCreditRequestMount() <= credit.getPropertyValue()*0.8;
             }
             case SECONDHOME -> {
-                return credit.getCreditMount() <= credit.getPropertyValue()*0.7;
+                return credit.getCreditRequestMount() <= credit.getPropertyValue()*0.7;
             }
             case COMERCIAL -> {
-                return credit.getCreditMount() <= credit.getPropertyValue()*0.6;
+                return credit.getCreditRequestMount() <= credit.getPropertyValue()*0.6;
             }
             case REMODELING -> {
-                return credit.getCreditMount() <= credit.getPropertyValue()*0.5;
+                return credit.getCreditRequestMount() <= credit.getPropertyValue()*0.5;
             }
-            default -> throw new IllegalStateException("Unexpected value: " + credit.getCreditType());
+            default -> throw new IllegalStateException("Unexpected value: " + credit.getCreditRequestType());
         }
     }
 
     //R6 Edad del solicitante
-    public boolean isClientAgeAllowed(Credit credit, Client client){
+    public boolean isClientAgeAllowed(CreditRequest credit, Client client){
         ZonedDateTime endOfPaymentDate = credit.getRequestDate().plusYears((long) credit.getLoanPeriod());
         int clientAgeAtEndOfPayment = (int) client.getBirthDate().until(endOfPaymentDate, ChronoUnit.YEARS);
         return clientAgeAtEndOfPayment < 70;
     }
 
-    public Credit documentRevision(Credit credit){
+    public CreditRequest documentRevision(CreditRequest credit){
         ArrayList<DocumentType> docsNeeded = documentService.whichMissingDocuments(credit);
         if (docsNeeded.isEmpty()) {
-            credit.setState(CreditState.EVALUATING);
+            credit.setState(CreditRequestState.EVALUATING);
         } else {
-            credit.setState(CreditState.PENDINGDOCUMENTATION);
+            credit.setState(CreditRequestState.PENDINGDOCUMENTATION);
         }
-        creditService.saveCredit(credit);
+        creditService.saveCreditRequest(credit);
         return credit;
     }
 

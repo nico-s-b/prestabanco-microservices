@@ -1,6 +1,6 @@
 package com.example.credit_service.services;
 
-import com.example.CreditService.entities.Client;
+import com.example.credit_service.clients.ClientFeignClient;
 import com.example.credit_service.entities.Credit;
 import com.example.common_utils.enums.CreditState;
 import com.example.common_utils.enums.CreditType;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -22,41 +21,42 @@ public class CreditService {
     CreditRepository creditRepository;
 
     @Autowired
-    DocumentService documentService;
+    ClientFeignClient clientFeignClient;
 
-    @Autowired
-    ClientService clientService;
-
-    public ArrayList<Credit> getCredits(){
+    public ArrayList<Credit> getAll(){
         return (ArrayList<Credit>) creditRepository.findAll();
     }
 
-    public Credit saveCredit(Credit credit){
+    public Credit save(Credit credit){
         credit.setLastUpdateDate(LocalDateTime.now());
         return creditRepository.save(credit);
     }
 
-    public Credit cancelCredit(Credit credit){
+    public Credit cancel(Credit credit){
         credit.setState(CreditState.CANCELLED);
         return creditRepository.save(credit);
     }
 
-    public Credit getCreditById(Long id){
+    public Credit getById(Long id){
         Optional<Credit> optionalRecord = creditRepository.findById(id);
         return optionalRecord.orElseThrow(() -> new ExecutionException("DocumentEntity not found for this id :: " + id));
     }
 
-    public ArrayList<Credit>  getCreditsById(Long id){
+    public ArrayList<Credit>  getByClientId(Long id){
         return (ArrayList<Credit>) creditRepository.findAllByClientId(id);
     }
 
-    public Credit createCredit(CreditRequest request, Client client) {
+    public Credit create(CreditRequest request) {
         Credit credit = buildCredit(request);
-        credit.setClient(client);
-        client.getCredits().add(credit);
-        credit.setDocuments(new ArrayList<>());
 
-        clientService.saveClient(client);
+        //Verificar si existe Cliente
+        Long clientId = clientFeignClient.getById(request.getClientId()).getId();;
+        if (clientId == null) {
+            throw new ExecutionException("Client not found");
+        }
+
+        //credit.setDocuments(new ArrayList<>());
+
         return creditRepository.save(credit);
     }
 
@@ -84,9 +84,10 @@ public class CreditService {
         credit.setCreditMount(request.getCreditMount());
         credit.setPropertyValue(request.getPropertyValue());
         credit.setAnnualRate(request.getAnnualRate());
-        credit.setRequestDate(ZonedDateTime.now());
-        credit.setLastUpdateDate(ZonedDateTime.now());
+        credit.setRequestDate(LocalDateTime.now());
+        credit.setLastUpdateDate(LocalDateTime.now());
         credit.setState(CreditState.INITIALREV);
+        credit.setClientId(request.getClientId());
         return credit;
     }
 }
