@@ -16,26 +16,26 @@ public class ExecutiveController {
 
     @GetMapping("/")
     public ResponseEntity<List<Executive>> list() {
-        List<Executive> executives = executiveService.getAllExecutives();
+        List<Executive> executives = executiveService.getAll();
         return ResponseEntity.ok(executives);
     }
 
     @PostMapping("/")
     public ResponseEntity<Executive> register(@RequestBody Executive executive) {
-        Executive savedExecutive = executiveService.saveExecutive(executive);
+        Executive savedExecutive = executiveService.save(executive);
         return ResponseEntity.ok(savedExecutive);
     }
 
     @PutMapping("/{executiveId}")
     public ResponseEntity<Executive> update(@PathVariable Long executiveId, @RequestBody Executive executive) {
         executive.setId(executiveId);
-        Executive executiveUpdated = executiveService.saveExecutive(executive);
+        Executive executiveUpdated = executiveService.save(executive);
         return ResponseEntity.ok(executiveUpdated);
     }
 
     @GetMapping("/{executiveId}")
     public ResponseEntity<Executive> getById(@PathVariable Long executiveId) {
-        Executive executive = executiveService.getExecutiveById(executiveId);
+        Executive executive = executiveService.getById(executiveId);
         if (executive != null) {
             return ResponseEntity.ok(executive);
         } else {

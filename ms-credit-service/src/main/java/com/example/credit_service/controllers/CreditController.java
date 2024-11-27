@@ -69,7 +69,7 @@ public class CreditController {
             return ResponseEntity.badRequest().body(null);
         }
 
-        Credit creditCreated = creditService.create(request);
+        Credit creditCreated = creditService.create(request, clientId);
         return ResponseEntity.ok(creditCreated);
     }
 

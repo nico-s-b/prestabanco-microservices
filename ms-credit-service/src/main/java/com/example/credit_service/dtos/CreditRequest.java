@@ -13,5 +13,4 @@ public class CreditRequest {
     private int creditMount;
     private int propertyValue;
     private float annualRate;
-    private Long clientId;
 }

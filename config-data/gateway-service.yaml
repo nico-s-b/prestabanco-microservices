@@ -14,7 +14,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "gateway,health,info"
+        include: "*"
 
 spring:
   cloud:

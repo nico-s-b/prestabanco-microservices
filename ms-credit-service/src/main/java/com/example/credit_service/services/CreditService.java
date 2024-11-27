@@ -1,6 +1,7 @@
 package com.example.credit_service.services;
 
 import com.example.credit_service.clients.ClientFeignClient;
+import com.example.credit_service.dtos.ClientDTO;
 import com.example.credit_service.entities.Credit;
 import com.example.common_utils.enums.CreditState;
 import com.example.common_utils.enums.CreditType;
@@ -46,15 +47,14 @@ public class CreditService {
         return (ArrayList<Credit>) creditRepository.findAllByClientId(id);
     }
 
-    public Credit create(CreditRequest request) {
-        Credit credit = buildCredit(request);
-
+    public Credit create(CreditRequest request, Long clientId) {
         //Verificar si existe Cliente
-        Long clientId = clientFeignClient.getById(request.getClientId()).getId();;
-        if (clientId == null) {
+        ClientDTO client = clientFeignClient.getById(clientId);;
+        if (client == null) {
             throw new ExecutionException("Client not found");
         }
 
+        Credit credit = buildCredit(request, clientId);
         //credit.setDocuments(new ArrayList<>());
 
         return creditRepository.save(credit);
@@ -69,7 +69,7 @@ public class CreditService {
         }
     }
 
-    public Credit buildCredit(CreditRequest request){
+    public Credit buildCredit(CreditRequest request, Long clientId){
         Credit credit = new Credit();
 
         switch (request.getCreditType()) {
@@ -87,7 +87,7 @@ public class CreditService {
         credit.setRequestDate(LocalDateTime.now());
         credit.setLastUpdateDate(LocalDateTime.now());
         credit.setState(CreditState.INITIALREV);
-        credit.setClientId(request.getClientId());
+        credit.setClientId(clientId);
         return credit;
     }
 }
