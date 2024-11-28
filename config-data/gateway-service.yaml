@@ -20,7 +20,7 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: false
+          enabled: true
         default-filters:
           - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
       globalcors:
@@ -31,7 +31,7 @@ spring:
             allowedHeaders: "*"
       routes:
         - id: ms-client-service
-          uri: lb://CLIENTS   #considerar uri una palabra en mayusculas
+          uri: lb://CLIENTS
           predicates:
             - Path=/api/v1/clients/**
             - Path=/api/v1/executives/**
