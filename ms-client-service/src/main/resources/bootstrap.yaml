@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ms-client-service
+    name: CLIENTS
   cloud:
     config:
       enabled: true
