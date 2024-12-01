@@ -8,10 +8,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class CreditcalculateServiceApplication {
+public class CalculationServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CreditcalculateServiceApplication.class, args);
+		SpringApplication.run(CalculationServiceApplication.class, args);
 	}
 
 }

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "ms-credit-service",
+@FeignClient(value = "CREDITS",
         path = "/api/v1/credit",
         configuration = {FeignClientConfig.class})
 public interface CreditFeignClient {

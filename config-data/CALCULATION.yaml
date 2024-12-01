@@ -1,5 +1,8 @@
 server:
   port: ${PORT:${SERVER_PORT:0}}
+feign:
+  discovery:
+    enabled: true
 eureka:
   client:
     fetch-registry: true
