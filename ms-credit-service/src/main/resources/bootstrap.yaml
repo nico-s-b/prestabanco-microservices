@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ms-credit-service
+    name: CREDITS
   cloud:
     config:
       enabled: true

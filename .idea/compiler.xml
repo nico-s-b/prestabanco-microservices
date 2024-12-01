@@ -10,13 +10,13 @@
         <module name="eureka-service" />
         <module name="ms-client-service" />
         <module name="config-service" />
+        <module name="ms-calculation-service" />
         <module name="ms-evaluation-service" />
         <module name="gateway-service" />
         <module name="ms-document-service" />
         <module name="ms-tracking-service" />
         <module name="ms-credit-service" />
         <module name="common-utils" />
-        <module name="ms-creditcalculate-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -32,9 +32,9 @@
       <module name="eureka-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="loan-type-service" options="-parameters" />
+      <module name="ms-calculation-service" options="-parameters" />
       <module name="ms-client-service" options="-parameters" />
       <module name="ms-credit-service" options="-parameters" />
-      <module name="ms-creditcalculate-service" options="-parameters" />
       <module name="ms-document-service" options="-parameters" />
       <module name="ms-evaluation-service" options="-parameters" />
       <module name="ms-tracking-service" options="-parameters" />

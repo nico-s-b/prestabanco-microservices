@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ms-tracking-service
+    name: TRACKING
   cloud:
     config:
       enabled: true

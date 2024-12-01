@@ -37,22 +37,22 @@ spring:
             - Path=/api/v1/executives/**
             - Path=/api/auth/**
         - id: ms-credit-service
-          uri: lb://ms-credit-service
+          uri: lb://CREDITS
           predicates:
             - Path=/api/v1/credits/**
         - id: ms-document-service
-          uri: lb://ms-document-service
+          uri: lb://DOCUMENTS
           predicates:
             - Path=/api/v1/documents/**
         - id: ms-evaluation-service
-          uri: lb://ms-evaluation-service
+          uri: lb://EVALUATION
           predicates:
             - Path=/api/v1/evals/**
-        - id: ms-creditcalculate-service
-          uri: lb://ms-creditcalculate-service
+        - id: ms-calculation-service
+          uri: lb://CALCULATION
           predicates:
             - Path=/api/v1/calculations/**
         - id: ms-tracking-service
-          uri: lb://ms-tracking-service
+          uri: lb://TRACKING
           predicates:
             - Path=/api/v1/tracking/**
