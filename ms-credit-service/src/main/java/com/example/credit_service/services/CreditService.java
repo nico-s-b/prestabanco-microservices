@@ -1,12 +1,12 @@
 package com.example.credit_service.services;
 
 import com.example.credit_service.clients.ClientFeignClient;
-import com.example.credit_service.dtos.ClientDTO;
+import com.example.common_utils.dtos.ClientDTO;
 import com.example.credit_service.entities.Credit;
 import com.example.common_utils.enums.CreditState;
 import com.example.common_utils.enums.CreditType;
 import com.example.credit_service.repositories.CreditRepository;
-import com.example.credit_service.dtos.CreditRequest;
+import com.example.common_utils.dtos.CreditRequest;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -22,6 +22,7 @@
         <option value="$PROJECT_DIR$/ms-document-service/pom.xml" />
         <option value="$PROJECT_DIR$/ms-evaluation-service/pom.xml" />
         <option value="$PROJECT_DIR$/ms-tracking-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-calculation-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

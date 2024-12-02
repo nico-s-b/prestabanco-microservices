@@ -64,6 +64,11 @@
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 	<dependencyManagement>
@@ -77,19 +82,10 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+	<packaging>jar</packaging>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>repackage</id>
-						<phase>none</phase>
-					</execution>
-				</executions>
-			</plugin>
+
 		</plugins>
 	</build>
 

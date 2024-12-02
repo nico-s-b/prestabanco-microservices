@@ -2,7 +2,7 @@ package com.example.credit_service.controllers;
 
 import com.example.credit_service.entities.Credit;
 import com.example.credit_service.services.CreditService;
-import com.example.credit_service.dtos.CreditRequest;
+import com.example.common_utils.dtos.CreditRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

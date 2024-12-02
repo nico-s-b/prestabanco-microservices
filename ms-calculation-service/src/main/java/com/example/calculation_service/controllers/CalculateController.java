@@ -2,7 +2,7 @@ package com.example.calculation_service.controllers;
 
 import com.example.calculation_service.dtos.CreditRestrictionsDTO;
 import com.example.calculation_service.entities.TotalCosts;
-import com.example.calculation_service.dtos.CreditRequest;
+import com.example.common_utils.dtos.CreditRequest;
 import com.example.calculation_service.services.CalculateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
