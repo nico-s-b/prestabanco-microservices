@@ -1,6 +1,5 @@
-package com.example.creditcalculate_service.dtos;
+package com.example.calculation_service.dtos;
 
-import com.example.common_utils.enums.CreditType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreditRequest {
-    private CreditType creditType;
+    private String creditType;
     private int loanPeriod;
     private int creditMount;
     private int propertyValue;

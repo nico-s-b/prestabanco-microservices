@@ -1,5 +1,7 @@
 package com.example.evaluation_service.services;
 
+import com.example.evaluation_service.clients.ClientFeignClient;
+import com.example.evaluation_service.clients.CreditFeignClient;
 import com.example.evaluation_service.clients.CreditRequestFeignClient;
 import com.example.evaluation_service.entities.Client;
 import com.example.evaluation_service.entities.CreditRequest;
@@ -18,10 +20,10 @@ public class RequestValidationService {
     DocumentService documentService;
 
     @Autowired
-    ClientService clientService;
+    ClientFeignClient clientFeignClient;
 
     @Autowired
-    CreditRequestFeignClient creditFeignClient;
+    CreditFeignClient creditFeignClient;
 
     public boolean verifyMaxFinancingMount(CreditRequest credit){
         if (credit.getCreditRequestType() == null) {
@@ -73,12 +75,7 @@ public class RequestValidationService {
         }
     }
 
-    //R6 Edad del solicitante
-    public boolean isClientAgeAllowed(CreditRequest credit, Client client){
-        ZonedDateTime endOfPaymentDate = credit.getRequestDate().plusYears((long) credit.getLoanPeriod());
-        int clientAgeAtEndOfPayment = (int) client.getBirthDate().until(endOfPaymentDate, ChronoUnit.YEARS);
-        return clientAgeAtEndOfPayment < 70;
-    }
+
 
     public CreditRequest documentRevision(CreditRequest credit){
         ArrayList<DocumentType> docsNeeded = documentService.whichMissingDocuments(credit);

@@ -3,6 +3,14 @@ server:
 feign:
   discovery:
     enabled: true
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/prestabanco-calculations
+    username: postgres
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
 eureka:
   client:
     fetch-registry: true

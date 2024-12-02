@@ -1,4 +1,4 @@
 FROM openjdk:21
-ARG JAR_FILE=target/ms-creditcalculate-service.jar
-COPY ${JAR_FILE} ms-creditcalculate-service.jar
-ENTRYPOINT ["java","-jar","/ms-creditcalculate-service.jar"]
+ARG JAR_FILE=target/ms-calculation-service.jar
+COPY ${JAR_FILE} ms-calculation-service.jar
+ENTRYPOINT ["java","-jar","/ms-calculation-service.jar"]

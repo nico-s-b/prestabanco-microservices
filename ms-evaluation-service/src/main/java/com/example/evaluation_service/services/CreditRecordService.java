@@ -1,6 +1,7 @@
 package com.example.evaluation_service.services;
 
 import com.example.evaluation_service.clients.CreditFeignClient;
+import com.example.evaluation_service.dtos.CreditRequest;
 import com.example.evaluation_service.entities.ClientAccount;
 import com.example.evaluation_service.repositories.CreditRecordRepository;
 import com.example.evaluation_service.entities.CreditRecord;
@@ -19,8 +20,7 @@ public class CreditRecordService {
 
     @Autowired
     CreditRecordRepository creditRecordRepository;
-    @Autowired
-    CreditFeignClient creditFeignClient;
+
     @Autowired
     private EmploymentRecordService employmentRecordService;
 
@@ -53,7 +53,7 @@ public class CreditRecordService {
     }
 
     //R4: Relación entre deuda e ingreso
-    public boolean hasGoodDebtIncomeRate(CreditRecord clientCreditRecord, CreditRecord clientEmploymentRecord, Credit credit) {
+    public boolean hasGoodDebtIncomeRate(CreditRecord clientCreditRecord, CreditRecord clientEmploymentRecord, CreditRequest credit) {
         int totalProjectedDebt = clientCreditRecord.getDebtAmount() + creditService.getCreditInstallment(credit);
         int income = employmentRecordService.getClientMonthlyIncome(clientEmploymentRecord);
         //Rechazar si la suma de deudas (considerando cuota del crédito) es mayor a 50%

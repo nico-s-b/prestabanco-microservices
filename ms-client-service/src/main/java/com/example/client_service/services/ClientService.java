@@ -37,7 +37,6 @@ public class ClientService {
             throw new ExecutionException("Client not found for this id :: " + client.getId());
         }
         Client savedClient = clientRepository.save(client);
-
         if (client.getId() == null) {
             try{
                 evaluationFeignClient.createRecords(savedClient.getId());

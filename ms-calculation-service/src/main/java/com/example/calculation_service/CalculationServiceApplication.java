@@ -1,4 +1,4 @@
-package com.example.creditcalculate_service;
+package com.example.calculation_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

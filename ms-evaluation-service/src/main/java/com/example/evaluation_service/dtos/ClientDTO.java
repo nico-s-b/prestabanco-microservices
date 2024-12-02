@@ -1,4 +1,4 @@
-package com.example.credit_service.dtos;
+package com.example.evaluation_service.dtos;
 
 import lombok.Data;
 
@@ -11,5 +11,5 @@ public class ClientDTO {
     private String paternalLastname;
     private String maternalLastname;
     private String email;
-    private String phone;
+    private LocalDateTime birthDate;
 }

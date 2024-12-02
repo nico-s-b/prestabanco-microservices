@@ -1,11 +1,10 @@
 package com.example.evaluation_service.services;
 
-import com.example.evaluation_service.clients.CreditFeignClient;
+import com.example.evaluation_service.clients.ClientFeignClient;
+import com.example.evaluation_service.dtos.ClientDTO;
 import com.example.evaluation_service.entities.ClientAccount;
-import com.example.evaluation_service.entities.Credit;
 import com.example.common_utils.*;
 import com.example.evaluation_service.repositories.ClientAccountRepository;
-import feign.Client;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +20,18 @@ public class ClientAccountService {
     ClientAccountRepository clientAccountRepository;
 
     @Autowired
-    CreditFeignClient creditFeignClient;
+    ClientFeignClient clientFeignClient;
 
     public ArrayList<ClientAccount> getAll(){
         return (ArrayList<ClientAccount>) clientAccountRepository.findAll();
     }
 
-    public ClientAccount getByClientId(Long id) {
-        return clientAccountRepository.findByClientId(id);
+    public ClientAccount getByClientId(Long clientId) {
+        ClientDTO client = clientFeignClient.getById(clientId);
+        if (client == null) {
+            throw new ExecutionException("Client not found");
+        }
+        return clientAccountRepository.findByClientId(clientId);
     }
 
     public void create(Long clientId){
@@ -46,7 +49,7 @@ public class ClientAccountService {
         return optionalRecord.orElseThrow(() -> new ExecutionException("ClientAccount not found for this id :: " + id));
     }
 
-    public boolean deleteClientAccount(Long id) throws Exception {
+    public boolean delete(Long id) throws Exception {
         try{
             clientAccountRepository.deleteById(id);
             return true;

@@ -1,6 +1,7 @@
 package com.example.evaluation_service.services;
 
 import com.example.evaluation_service.clients.CreditFeignClient;
+import com.example.evaluation_service.dtos.CreditRequest;
 import com.example.evaluation_service.entities.Credit;
 import com.example.evaluation_service.entities.CreditRecord;
 import com.example.evaluation_service.entities.EmploymentRecord;
@@ -28,7 +29,7 @@ public class EmploymentRecordService {
     }
 
     public void create(Long clientId){
-        EmploymentRecord record = new CreditRecord();
+        EmploymentRecord record = new EmploymentRecord();
         record.setClientid(clientId);
         employmentRecordRepository.save(record);
     }
@@ -61,7 +62,7 @@ public class EmploymentRecordService {
     }
 
     //R1
-    public boolean hasEnoughIncomeInstallmentRate(EmploymentRecord employmentRecord, Credit credit){
+    public boolean hasEnoughIncomeInstallmentRate(EmploymentRecord employmentRecord, CreditRequest credit){
         int monthlyInstallment = creditService.getCreditInstallment(credit);
         float rate;
         rate = ((float) monthlyInstallment / getClientMonthlyIncome(employmentRecord))*100;
@@ -70,7 +71,7 @@ public class EmploymentRecordService {
     }
 
     //R3 Calcula años de servicio de un empleado a partir de fecha de inicio de su trabajo actual
-    public boolean hasEnoughYearsOfService(EmploymentRecord employmentRecord, Credit credit){
+    public boolean hasEnoughYearsOfService(EmploymentRecord employmentRecord, CreditRequest credit){
         ZonedDateTime start = employmentRecord.getCurrentWorkStartDate();
         int yearsOfService = (int) start.until(credit.getRequestDate(), ChronoUnit.YEARS);
         // Antigüedad menor a un año es rechazada
