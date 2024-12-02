@@ -33,10 +33,7 @@ spring:
         - id: ms-client-service
           uri: lb://CLIENTS
           predicates:
-            - Path:
-              - /api/v1/clients/**
-              - /api/v1/executives/**
-              - /api/auth/**
+            - Path=/api/v1/clients/**,/api/v1/executives/**,/api/auth/**
         - id: ms-credit-service
           uri: lb://CREDITS
           predicates:
