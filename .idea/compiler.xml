@@ -8,9 +8,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-service" />
-        <module name="ms-client-service" />
         <module name="config-service" />
         <module name="ms-calculation-service" />
+        <module name="ms-user-service" />
         <module name="ms-evaluation-service" />
         <module name="gateway-service" />
         <module name="ms-document-service" />
@@ -33,11 +33,11 @@
       <module name="gateway-service" options="-parameters" />
       <module name="loan-type-service" options="-parameters" />
       <module name="ms-calculation-service" options="-parameters" />
-      <module name="ms-client-service" options="-parameters" />
       <module name="ms-credit-service" options="-parameters" />
       <module name="ms-document-service" options="-parameters" />
       <module name="ms-evaluation-service" options="-parameters" />
       <module name="ms-tracking-service" options="-parameters" />
+      <module name="ms-user-service" options="-parameters" />
     </option>
   </component>
 </project>

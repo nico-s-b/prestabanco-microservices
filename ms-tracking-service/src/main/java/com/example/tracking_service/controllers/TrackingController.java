@@ -1,7 +1,6 @@
 package com.example.tracking_service.controllers;
 
 import com.example.common_utils.dtos.DocumentUpdateDTO;
-import com.example.tracking_service.entities.CreditTrack;
 import com.example.tracking_service.services.TrackingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -30,8 +30,8 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*"
       routes:
-        - id: ms-client-service
-          uri: lb://CLIENTS
+        - id: ms-user-service
+          uri: lb://USERS
           predicates:
             - Path=/api/v1/clients/**,/api/v1/executives/**,/api/auth/**
         - id: ms-credit-service
