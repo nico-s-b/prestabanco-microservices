@@ -4,14 +4,12 @@
  */
 package com.example.document_service.entities;
 
-import com.example.tingeso1.enums.DocumentType;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.example.common_utils.enums.DocumentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "documents")
@@ -25,10 +23,7 @@ public class DocumentEntity {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @JsonBackReference(value = "credit-docs")
-    @ManyToOne
-    @JoinColumn(name="credit_id", nullable=true)
-    private Credit credit;
+    private Long creditId;
 
     @Enumerated(EnumType.STRING)
     private DocumentType documentType;
@@ -36,5 +31,5 @@ public class DocumentEntity {
     @Column(columnDefinition = "BYTEA",name = "file_data", nullable = false)
     private byte[] fileData;
 
-    private ZonedDateTime uploadDate;
+    private LocalDateTime uploadDate;
 }

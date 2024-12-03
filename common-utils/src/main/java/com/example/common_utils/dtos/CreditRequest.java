@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreditRequest {
+    private Long id;
     private String creditType;
     private int loanPeriod;
     private int creditMount;

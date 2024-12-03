@@ -1,19 +1,25 @@
 package com.example.document_service.services;
 
-import com.example.tingeso1.entities.Credit;
-import com.example.tingeso1.entities.DocumentEntity;
-import com.example.tingeso1.enums.DocumentType;
-import com.example.tingeso1.repositories.DocumentRepository;
+import com.example.common_utils.dtos.DocumentUpdateDTO;
+import com.example.common_utils.enums.CreditType;
+import com.example.document_service.clients.CreditFeignClient;
+import com.example.document_service.clients.TrackingFeignClient;
+import com.example.document_service.entities.DocumentEntity;
+import com.example.document_service.repositories.DocumentRepository;
+import com.example.common_utils.enums.DocumentType;
+import static com.example.common_utils.enums.CreditType.*;
+import com.example.common_utils.dtos.CreditRequest;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.ZonedDateTime;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.example.tingeso1.enums.CreditType.*;
 
 @Service
 public class DocumentService {
@@ -21,16 +27,50 @@ public class DocumentService {
     @Autowired
     DocumentRepository documentRepository;
 
-    public ArrayList<DocumentEntity> getDocuments(){
-        return (ArrayList<DocumentEntity>) documentRepository.findAll();
+    @Autowired
+    CreditFeignClient creditFeignClient;
+
+    @Autowired
+    TrackingFeignClient trackingFeignClient;
+
+    public List<DocumentEntity> getAll(){
+        return (List<DocumentEntity>) documentRepository.findAll();
     }
 
-    public DocumentEntity saveDocument(DocumentEntity document){
-        document.setUploadDate(ZonedDateTime.now());
+    public DocumentEntity save(DocumentEntity document, CreditType creditType){
+        document.setUploadDate(LocalDateTime.now());
+
+        Long creditId = document.getCreditId();
+
+        DocumentUpdateDTO notification = new DocumentUpdateDTO();
+        notification.setCreditId(creditId);
+        notification.setCreditType(creditType);
+        notification.setDocumentTypes(getDocumentTypesByCreditId(creditId));
+        trackingFeignClient.notifyDocumentsUpdated(notification);
+
         return documentRepository.save(document);
     }
 
-    public DocumentEntity getDocumentById(Long id){
+    public DocumentEntity create(Long creditId, String documentType, MultipartFile fileData) throws IOException {
+        CreditType creditType;
+        try {
+            CreditRequest credit = creditFeignClient.getById(creditId);
+            if (credit == null) {
+                throw new RuntimeException("Credit not found");
+            }
+            creditType = CreditType.valueOf(credit.getCreditType());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        DocumentEntity document = new DocumentEntity();
+        byte[] fileBytes = fileData.getBytes();
+        document.setFileData(fileBytes);
+        document.setDocumentType(DocumentType.valueOf(documentType));
+        document.setCreditId(creditId);
+        return save(document, creditType);
+    }
+
+    public DocumentEntity getById(Long id){
         Optional<DocumentEntity> optionalRecord = documentRepository.findById(id);
         return optionalRecord.orElseThrow(() -> new ExecutionException("DocumentEntity not found for this id :: " + id));
     }
@@ -39,7 +79,16 @@ public class DocumentService {
         return documentRepository.findAllByCreditId(creditId);
     }
 
-    public boolean deleteDocument(Long id) throws Exception {
+    private List<DocumentType> getDocumentTypesByCreditId(Long creditId){
+        List<DocumentType> documentTypes = new ArrayList<>();
+        List<DocumentEntity> documents = getDocumentsByCreditId(creditId);
+        for (DocumentEntity document : documents) {
+            documentTypes.add(document.getDocumentType());
+        }
+        return documentTypes;
+    }
+
+    public boolean delete(Long id) throws Exception {
         try{
             documentRepository.deleteById(id);
             return true;
@@ -48,61 +97,49 @@ public class DocumentService {
         }
     }
 
-    ArrayList<DocumentType> whichMissingDocuments(Credit credit){
-        ArrayList<DocumentEntity> documents = (ArrayList<DocumentEntity>) credit.getDocuments();
-        ArrayList<DocumentType> missing = new ArrayList<>();
+    public List<DocumentType> whichMissingDocuments(List<DocumentType> actualDocuments, CreditType creditType){
+        List<DocumentType> missing = new ArrayList<>();
 
-        if (documents == null || credit == null || credit.getCreditType() == null) {
+        if (actualDocuments == null || creditType == null) {
             return missing;
         }
 
-        if (credit.getCreditType().equals(COMERCIAL)){
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.FINANCIALSTATUSREPORT.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.FINANCIALSTATUSREPORT);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.INCOMECERTIFY.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.INCOMECERTIFY);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.VALUATIONCERTIFY.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.VALUATIONCERTIFY);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.BUSINESSPLAN.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.BUSINESSPLAN);
-            }
-        } else if (credit.getCreditType().equals(FIRSTHOME)) {
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.INCOMECERTIFY.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.INCOMECERTIFY);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.VALUATIONCERTIFY.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.VALUATIONCERTIFY);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.CREDITREPORT.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.CREDITREPORT);
-            }
-        } else if (credit.getCreditType().equals(SECONDHOME)) {
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.INCOMECERTIFY.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.INCOMECERTIFY);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.VALUATIONCERTIFY.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.VALUATIONCERTIFY);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.FIRSTHOUSEDEED.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.FIRSTHOUSEDEED);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.CREDITREPORT.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.CREDITREPORT);
-            }
-        } else if (credit.getCreditType().equals(REMODELING)) {
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.INCOMECERTIFY.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.INCOMECERTIFY);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.REMODELINGBUDGET.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.REMODELINGBUDGET);
-            }
-            if (documents.stream().noneMatch(documentEntity -> DocumentType.UPDATEDVALUATIONCERTIFY.equals(documentEntity.getDocumentType()))) {
-                missing.add(DocumentType.UPDATEDVALUATIONCERTIFY);
+        List<DocumentType> requiredDocuments = new ArrayList<>();
+        if (creditType.equals(CreditType.COMERCIAL)) {
+            requiredDocuments = List.of(
+                    DocumentType.FINANCIALSTATUSREPORT,
+                    DocumentType.INCOMECERTIFY,
+                    DocumentType.VALUATIONCERTIFY,
+                    DocumentType.BUSINESSPLAN
+            );
+        } else if (creditType.equals(FIRSTHOME)) {
+            requiredDocuments = List.of(
+                    DocumentType.INCOMECERTIFY,
+                    DocumentType.VALUATIONCERTIFY,
+                    DocumentType.CREDITREPORT
+            );
+        } else if (creditType.equals(SECONDHOME)) {
+            requiredDocuments = List.of(
+                    DocumentType.INCOMECERTIFY,
+                    DocumentType.VALUATIONCERTIFY,
+                    DocumentType.FIRSTHOUSEDEED,
+                    DocumentType.CREDITREPORT
+            );
+        } else if (creditType.equals(REMODELING)) {
+            requiredDocuments = List.of(
+                    DocumentType.INCOMECERTIFY,
+                    DocumentType.REMODELINGBUDGET,
+                    DocumentType.UPDATEDVALUATIONCERTIFY
+            );
+        }
+
+        for (DocumentType required : requiredDocuments) {
+            if (!actualDocuments.contains(required)) {
+                missing.add(required);
             }
         }
+
         return missing;
     }
+
 }

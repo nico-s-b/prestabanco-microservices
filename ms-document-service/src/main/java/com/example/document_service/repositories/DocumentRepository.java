@@ -1,6 +1,6 @@
 package com.example.document_service.repositories;
 
-import com.example.tingeso1.entities.DocumentEntity;
+import com.example.document_service.entities.DocumentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

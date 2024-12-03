@@ -3,6 +3,7 @@ package com.example.evaluation_service.controllers;
 import com.example.evaluation_service.services.ClientAccountService;
 import com.example.evaluation_service.services.CreditRecordService;
 import com.example.evaluation_service.services.EmploymentRecordService;
+import com.example.evaluation_service.services.PersonalInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ public class EvaluationController {
     private final ClientAccountService clientAccountService;
     private final CreditRecordService creditRecordService;
     private final EmploymentRecordService employmentRecordService;
+    private final PersonalInformationService personalInformationService;
 
     public EvaluationController(ClientAccountService clientAccountService,
                                 CreditRecordService creditRecordService,
@@ -22,6 +24,7 @@ public class EvaluationController {
         this.clientAccountService = clientAccountService;
         this.creditRecordService = creditRecordService;
         this.employmentRecordService = employmentRecordService;
+        this.personalInformationService = new PersonalInformationService();
     }
 
     @PostMapping

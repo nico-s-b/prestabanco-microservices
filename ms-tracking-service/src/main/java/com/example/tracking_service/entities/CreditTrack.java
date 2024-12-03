@@ -1,33 +1,27 @@
-package com.example.credit_service.entities;
+package com.example.tracking_service.entities;
 
 import com.example.common_utils.enums.CreditState;
-import com.example.common_utils.enums.CreditType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "credits")
+@Table(name = "trackings")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Credit {
-
+public class CreditTrack {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
 
-    private Long clientId;
+    private Long creditId;
 
     @Enumerated(EnumType.STRING)
-    private CreditType creditType;
-
-    private int loanPeriod;
-    private float annualRate;
-    private int creditMount;
-    private int propertyValue;
-    private LocalDateTime requestDate;
+    private CreditState state;
+    private LocalDateTime lastUpdateDate;
+    private Long executiveId;
 }
