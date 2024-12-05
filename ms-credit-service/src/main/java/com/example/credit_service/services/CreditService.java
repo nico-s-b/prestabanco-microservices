@@ -1,7 +1,9 @@
 package com.example.credit_service.services;
 
+import com.example.common_utils.dtos.TrackingRequest;
 import com.example.credit_service.clients.ClientFeignClient;
 import com.example.common_utils.dtos.ClientDTO;
+import com.example.credit_service.clients.TrackingFeignClient;
 import com.example.credit_service.entities.Credit;
 import com.example.common_utils.enums.CreditState;
 import com.example.common_utils.enums.CreditType;
@@ -24,17 +26,22 @@ public class CreditService {
     @Autowired
     ClientFeignClient clientFeignClient;
 
+    @Autowired
+    TrackingFeignClient trackingFeignClient;
+
     public ArrayList<Credit> getAll(){
         return (ArrayList<Credit>) creditRepository.findAll();
     }
 
     public Credit save(Credit credit){
-        credit.setLastUpdateDate(LocalDateTime.now());
-        return creditRepository.save(credit);
-    }
-
-    public Credit cancel(Credit credit){
-        credit.setState(CreditState.CANCELLED);
+        TrackingRequest trackingRequest = new TrackingRequest();
+        trackingRequest.setCreditId(credit.getId());
+        trackingRequest.setLastUpdateDate(LocalDateTime.now());
+        try {
+            trackingFeignClient.createTracking(trackingRequest);
+        } catch (Exception e) {
+            throw new ExecutionException("Error al crear el tracking para el crédito");
+        }
         return creditRepository.save(credit);
     }
 
@@ -48,15 +55,12 @@ public class CreditService {
     }
 
     public Credit create(CreditRequest request, Long clientId) {
-        //Verificar si existe Cliente
         ClientDTO client = clientFeignClient.getById(clientId);;
         if (client == null) {
             throw new ExecutionException("Client not found");
         }
 
         Credit credit = buildCredit(request, clientId);
-        //credit.setDocuments(new ArrayList<>());
-
         return creditRepository.save(credit);
     }
 
@@ -85,8 +89,6 @@ public class CreditService {
         credit.setPropertyValue(request.getPropertyValue());
         credit.setAnnualRate(request.getAnnualRate());
         credit.setRequestDate(LocalDateTime.now());
-        credit.setLastUpdateDate(LocalDateTime.now());
-        credit.setState(CreditState.INITIALREV);
         credit.setClientId(clientId);
         return credit;
     }

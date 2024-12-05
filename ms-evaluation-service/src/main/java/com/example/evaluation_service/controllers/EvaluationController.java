@@ -32,6 +32,7 @@ public class EvaluationController {
         clientAccountService.create(id);
         creditRecordService.create(id);
         employmentRecordService.create(id);
+        personalInformationService.create(id);
         return ResponseEntity.ok("Records created");
     }
 

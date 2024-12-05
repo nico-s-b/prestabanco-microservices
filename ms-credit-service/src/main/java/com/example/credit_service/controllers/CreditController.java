@@ -73,14 +73,4 @@ public class CreditController {
         return ResponseEntity.ok(creditCreated);
     }
 
-    @GetMapping("/cancel")
-    public ResponseEntity<Credit> cancel(@RequestParam Long id) {
-        Credit credit = creditService.getById(id);
-        if (credit == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        Credit canceledCredit = creditService.cancel(credit);
-        return ResponseEntity.ok(canceledCredit);
-    }
-
 }

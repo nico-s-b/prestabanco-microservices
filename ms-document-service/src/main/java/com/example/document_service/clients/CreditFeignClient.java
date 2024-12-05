@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CreditFeignClient {
 
     @GetMapping("/{id}")
-    public CreditRequest getById(@PathVariable Long id);
+    CreditRequest getById(@PathVariable Long id);
 }

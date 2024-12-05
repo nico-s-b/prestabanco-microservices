@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Table(name = "trackings")
+@Table(name = "credit_tracks")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +23,7 @@ public class CreditTrack {
 
     @Enumerated(EnumType.STRING)
     private CreditState state;
+    private int docsUploaded;
     private LocalDateTime lastUpdateDate;
     private Long executiveId;
 }

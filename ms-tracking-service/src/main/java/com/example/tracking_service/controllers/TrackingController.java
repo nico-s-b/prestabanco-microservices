@@ -1,6 +1,8 @@
 package com.example.tracking_service.controllers;
 
 import com.example.common_utils.dtos.DocumentUpdateDTO;
+import com.example.common_utils.dtos.TrackingRequest;
+import com.example.tracking_service.entities.CreditTrack;
 import com.example.tracking_service.services.TrackingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,4 +19,17 @@ public class TrackingController {
         trackingService.handleDocumentUpdate(notification);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{creditId}")
+    public ResponseEntity<CreditTrack> getTracking(@PathVariable Long creditId) {
+        CreditTrack track = trackingService.getByCreditId(creditId);
+        return ResponseEntity.ok().body(track);
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Void> createTracking(@RequestBody TrackingRequest request) {
+        trackingService.create(request);
+        return ResponseEntity.ok().build();
+    }
+
 }

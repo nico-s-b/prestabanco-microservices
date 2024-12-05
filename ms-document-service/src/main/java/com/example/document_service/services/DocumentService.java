@@ -46,7 +46,7 @@ public class DocumentService {
         notification.setCreditId(creditId);
         notification.setCreditType(creditType);
         notification.setDocumentTypes(getDocumentTypesByCreditId(creditId));
-        trackingFeignClient.notifyDocumentsUpdated(notification);
+        trackingFeignClient.documentsUpdated(notification);
 
         return documentRepository.save(document);
     }

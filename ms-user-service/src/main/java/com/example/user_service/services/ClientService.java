@@ -1,7 +1,6 @@
 package com.example.user_service.services;
 
 import com.example.user_service.clients.EvaluationFeignClient;
-import com.example.client_service.entities.*;
 import com.example.user_service.entities.Client;
 import com.example.user_service.repositories.ClientRepository;
 import org.hibernate.sql.exec.ExecutionException;

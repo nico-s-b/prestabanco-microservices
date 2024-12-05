@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-@ComponentScan(basePackages = {"com.example.client_service", "com.example.common_utils"})
+@ComponentScan(basePackages = {"com.example.user_service", "com.example.common_utils"})
 public class UserServiceApplication {
 
 	public static void main(String[] args) {

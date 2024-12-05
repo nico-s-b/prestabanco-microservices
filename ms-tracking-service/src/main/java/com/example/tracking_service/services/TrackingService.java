@@ -1,6 +1,7 @@
 package com.example.tracking_service.services;
 
 import com.example.common_utils.dtos.DocumentUpdateDTO;
+import com.example.common_utils.dtos.TrackingRequest;
 import com.example.common_utils.enums.CreditState;
 import com.example.common_utils.enums.CreditType;
 import com.example.common_utils.enums.DocumentType;
@@ -45,10 +46,36 @@ public class TrackingService {
 
         List<DocumentType> missingDocuments = documentFeignClient.whichMissingDocuments(actualDocuments,creditType);
 
+        CreditTrack track = trackingRepository.findByCreditId(creditId);
+        int docsNeeded = docsNeeded(creditType);
+        track.setDocsUploaded( docsNeeded - missingDocuments.size() );
+
         if (missingDocuments.isEmpty()) {
             updateCreditState(creditId, CreditState.EVALUATING); // E3. En Evaluación
         } else {
             updateCreditState(creditId, CreditState.PENDINGDOCUMENTATION); // E2. Pendiente de Documentación
         }
+    }
+
+    public CreditTrack getByCreditId(Long creditId) {
+        return trackingRepository.findByCreditId(creditId);
+    }
+
+    private int docsNeeded(CreditType creditType) {
+        switch (creditType) {
+            case COMERCIAL, SECONDHOME -> {
+                return 4;
+            }
+            case FIRSTHOME, REMODELING -> {
+                return 3;
+            }
+        }
+        return 0;
+    }
+
+    public void create(TrackingRequest request) {
+        TrackingRequest tracking = new TrackingRequest();
+        tracking.setCreditId(request.getCreditId());
+        tracking.setLastUpdateDate(request.getLastUpdateDate());
     }
 }
