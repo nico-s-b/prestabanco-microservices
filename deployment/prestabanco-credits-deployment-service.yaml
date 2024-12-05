@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prestabanco-credits-pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 512Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/prestabanco-credits-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prestabanco-credits-pvc
+  labels:
+    app: postgres
+    tier: database
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prestabanco-credits
+  labels:
+    app: prestabanco-credits-deployment
+    tier: database
+spec:
+  selector:
+    matchLabels:
+      app: prestabanco-credits-pod
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: prestabanco-credits-pod
+        tier: database
+    spec:
+      containers:
+        - name: prestabanco-credits
+          image: postgres
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_USER_CREDITS
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_PASSWORD_CREDITS
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: prestabanco-credits-data
+      volumes:
+        - name: prestabanco-credits-data
+          persistentVolumeClaim:
+            claimName: prestabanco-credits-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prestabanco-credits-service
+  labels:
+    app: prestabanco-credits-service
+    tier: database
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: prestabanco-credits-deployment
+    tier: database
+  type: LoadBalancer

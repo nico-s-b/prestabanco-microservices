@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prestabanco-tracking-pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 512Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/prestabanco-tracking-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prestabanco-tracking-pvc
+  labels:
+    app: postgres
+    tier: database
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prestabanco-tracking
+  labels:
+    app: prestabanco-tracking-deployment
+    tier: database
+spec:
+  selector:
+    matchLabels:
+      app: prestabanco-tracking-pod
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: prestabanco-tracking-pod
+        tier: database
+    spec:
+      containers:
+        - name: prestabanco-tracking
+          image: postgres
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_USER_TRACKING
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_PASSWORD_TRACKING
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: prestabanco-tracking-data
+      volumes:
+        - name: prestabanco-tracking-data
+          persistentVolumeClaim:
+            claimName: prestabanco-tracking-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prestabanco-tracking-service
+  labels:
+    app: prestabanco-tracking-service
+    tier: database
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: prestabanco-tracking-deployment
+    tier: database
+  type: LoadBalancer

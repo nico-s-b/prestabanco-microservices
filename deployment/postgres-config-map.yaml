@@ -5,9 +5,21 @@ metadata:
   labels:
     app: postgres-config-map
 data:
-  DB_HOST_CALCULATION: orders-db-service
-  DB_PORT_CALCULATION: "5432"
-  DB_DBNAME_CALCULATION: orders-db
-  DB_HOST_PRODUCTS: products-db-service
-  DB_PORT_PRODUCTS: "5433"
-  DB_DBNAME_PRODUCTS: products-db
+  DB_HOST_CALCULATIONS: prestabanco-calculations-service
+  DB_PORT_CALCULATIONS: "5432"
+  DB_DBNAME_CALCULATIONS: prestabanco-calculations
+  DB_HOST_CREDITS: prestabanco-credits-service
+  DB_PORT_CREDITS: "5433"
+  DB_DBNAME_CREDITS: prestabanco-credits
+  DB_HOST_DOCUMENTS: prestabanco-documents-service
+  DB_PORT_DOCUMENTS: "5434"
+  DB_DBNAME_DOCUMENTS: prestabanco-documents
+  DB_HOST_EVALUATIONS: prestabanco-evaluations-service
+  DB_PORT_EVALUATIONS: "5435"
+  DB_DBNAME_EVALUATIONS: prestabanco-evaluations
+  DB_HOST_TRACKING: prestabanco-tracking-service
+  DB_PORT_TRACKING: "5436"
+  DB_DBNAME_TRACKING: prestabanco-tracking
+  DB_HOST_USERS: prestabanco-users-service
+  DB_PORT_USERS: "5437"
+  DB_DBNAME_USERS: prestabanco-users

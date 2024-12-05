@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-calculation
+  labels:
+    app: ms-calculation-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ms-calculation-pod
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ms-calculation-pod
+    spec:
+      containers:
+        - name: ms-calculation
+          image: nicolassepulvedab/ms-calculation-service
+          ports:
+            - containerPort: 8090
+          env:
+            - name: SERVER_PORT
+              value: "0"
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-map
+                  key: DB_HOST_CALCULATIONS
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-map
+                  key: DB_PORT_CALCULATIONS
+            - name: DB_DBNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-map
+                  key: DB_DBNAME_CALCULATIONS
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DB_USER_CALCULATIONS
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DB_PASSWORD_CALCULATIONS

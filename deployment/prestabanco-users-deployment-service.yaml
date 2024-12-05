@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prestabanco-users-pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 512Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/prestabanco-users-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prestabanco-users-pvc
+  labels:
+    app: postgres
+    tier: database
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prestabanco-users
+  labels:
+    app: prestabanco-users-deployment
+    tier: database
+spec:
+  selector:
+    matchLabels:
+      app: prestabanco-users-pod
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: prestabanco-users-pod
+        tier: database
+    spec:
+      containers:
+        - name: prestabanco-users
+          image: postgres
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_USER_USERS
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_PASSWORD_USERS
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: prestabanco-users-data
+      volumes:
+        - name: prestabanco-users-data
+          persistentVolumeClaim:
+            claimName: prestabanco-users-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prestabanco-users-service
+  labels:
+    app: prestabanco-users-service
+    tier: database
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: prestabanco-users-deployment
+    tier: database
+  type: LoadBalancer
