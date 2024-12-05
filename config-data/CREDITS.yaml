@@ -2,6 +2,6 @@ server:
   port: ${PORT:${SERVER_PORT:0}}
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/prestabanco-credits
+    url: jdbc:postgresql://CREDITS:5432/prestabanco-credits
     username: postgres
     password: admin

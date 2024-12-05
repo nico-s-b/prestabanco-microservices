@@ -34,16 +34,21 @@ public class CreditService {
     }
 
     public Credit save(Credit credit){
+        Credit savedCredit = creditRepository.save(credit);
+
         TrackingRequest trackingRequest = new TrackingRequest();
-        trackingRequest.setCreditId(credit.getId());
+        trackingRequest.setCreditId(savedCredit.getId());
         trackingRequest.setLastUpdateDate(LocalDateTime.now());
         try {
+            System.out.println(trackingRequest);
             trackingFeignClient.createTracking(trackingRequest);
         } catch (Exception e) {
             throw new ExecutionException("Error al crear el tracking para el crédito");
         }
-        return creditRepository.save(credit);
+        return savedCredit;
     }
+
+
 
     public Credit getById(Long id){
         Optional<Credit> optionalRecord = creditRepository.findById(id);
@@ -61,7 +66,7 @@ public class CreditService {
         }
 
         Credit credit = buildCredit(request, clientId);
-        return creditRepository.save(credit);
+        return save(credit);
     }
 
     public boolean deleteCredit(Long id) throws Exception {

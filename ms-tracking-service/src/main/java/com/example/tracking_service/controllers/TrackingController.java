@@ -28,7 +28,7 @@ public class TrackingController {
 
     @PostMapping("/")
     public ResponseEntity<Void> createTracking(@RequestBody TrackingRequest request) {
-        trackingService.create(request);
+        trackingService.createAndSave(request);
         return ResponseEntity.ok().build();
     }
 

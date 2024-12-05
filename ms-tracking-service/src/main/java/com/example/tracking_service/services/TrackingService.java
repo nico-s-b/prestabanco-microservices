@@ -73,9 +73,12 @@ public class TrackingService {
         return 0;
     }
 
-    public void create(TrackingRequest request) {
-        TrackingRequest tracking = new TrackingRequest();
+    public void createAndSave(TrackingRequest request) {
+        CreditTrack tracking = new CreditTrack();
         tracking.setCreditId(request.getCreditId());
         tracking.setLastUpdateDate(request.getLastUpdateDate());
+        tracking.setState(CreditState.INITIALREV);
+        tracking.setDocsUploaded(0);
+        trackingRepository.save(tracking);
     }
 }
