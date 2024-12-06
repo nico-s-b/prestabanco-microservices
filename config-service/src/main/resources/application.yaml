@@ -10,3 +10,17 @@ spring:
           search-paths: config-data
   application:
     name: config-service
+  web:
+    servlet:
+      dispatcher:
+        enable-logging-request-details: true
+logging:
+  level:
+    org.springframework.core.env.PropertySourcesPropertyResolver: TRACE
+    root: INFO
+    org.springframework.cloud: DEBUG
+    org.springframework.core.env: TRACE
+    org.springframework.cloud.config.server: TRACE
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+
+
