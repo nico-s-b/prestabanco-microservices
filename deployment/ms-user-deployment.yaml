@@ -31,8 +31,8 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_PORT_USERS
-            - name: DB_DBNAME
+                  key: DB_PORT
+            - name: DB_DBNAME_USERS
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map

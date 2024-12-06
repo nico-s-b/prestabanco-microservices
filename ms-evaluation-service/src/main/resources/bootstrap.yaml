@@ -1,23 +1,7 @@
 spring:
   application:
     name: EVALUATION
-  profiles:
-    active: ${PROFILE:dev}
----
-spring:
-  config:
-    activate:
-      on-profile: dev
   cloud:
     config:
       enabled: true
-      uri: http://localhost:8081
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-  cloud:
-    config:
-      enabled: true
-      uri: http://config-service:8081
+      uri: http://${CONFIG_SERVER_HOST}:8081
