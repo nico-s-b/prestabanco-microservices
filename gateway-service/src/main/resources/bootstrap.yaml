@@ -3,16 +3,22 @@ spring:
     name: gateway-service
   main:
     web-application-type: reactive
+  profiles:
+    active: ${PROFILE:dev}
 ---
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
   cloud:
     config:
       enabled: true
       uri: http://localhost:8081
 ---
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
   cloud:
     config:
       enabled: true
