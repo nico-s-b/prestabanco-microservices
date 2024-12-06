@@ -1,9 +1,19 @@
 spring:
   application:
     name: gateway-service
+  main:
+    web-application-type: reactive
+---
+spring:
+  profiles: dev
   cloud:
     config:
       enabled: true
       uri: http://localhost:8081
-  main:
-    web-application-type: reactive
+---
+spring:
+  profiles: prod
+  cloud:
+    config:
+      enabled: true
+      uri: http://config-service:8081

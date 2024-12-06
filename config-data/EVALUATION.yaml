@@ -1,6 +1,18 @@
 server:
   port: ${PORT:${SERVER_PORT:0}}
 spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/prestabanco-evaluations
+    username: postgres
+    password: admin
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
   datasource:
     url: jdbc:postgresql://EVALUATION:5432/prestabanco-evaluations
     username: postgres

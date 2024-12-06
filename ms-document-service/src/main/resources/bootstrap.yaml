@@ -1,7 +1,17 @@
 spring:
   application:
     name: DOCUMENTS
+---
+spring:
+  profiles: dev
   cloud:
     config:
       enabled: true
       uri: http://localhost:8081
+---
+spring:
+  profiles: prod
+  cloud:
+    config:
+      enabled: true
+      uri: http://config-service:8081
