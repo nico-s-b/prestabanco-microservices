@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ms-evaluation
+  name: ms-credit
   labels:
-    app: ms-evaluation-deployment
+    app: ms-credit-deployment
 spec:
   selector:
     matchLabels:
-      app: ms-evaluation-pod
+      app: ms-credit-pod
   replicas: 1
   template:
     metadata:
       labels:
-        app: ms-evaluation-pod
+        app: ms-credit-pod
     spec:
       containers:
-        - name: ms-evaluation
-          image: nicolassepulvedab/ms-evaluation-service
+        - name: ms-credit
+          image: nicolassepulvedab/ms-credit-service
           ports:
-            - containerPort: 8093
+            - containerPort: 8091
           env:
             - name: SERVER_PORT
               value: "0"
@@ -26,7 +26,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_HOST_EVALUATIONS
+                  key: DB_HOST_CREDITS
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
@@ -36,14 +36,16 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_DBNAME_EVALUATIONS
+                  key: DB_DBNAME_CREDITS
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_USER_EVALUATIONS
+                  name: postgres-credentials
+                  key: DB_USER_CREDITS
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_PASSWORD_EVALUATIONS
+                  name: postgres-credentials
+                  key: DB_PASSWORD_CREDITS
+            - name: CONFIG_SERVER_HOST
+              value: "config-service-service"

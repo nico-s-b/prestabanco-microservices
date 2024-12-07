@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ms-credit
+  name: ms-document
   labels:
-    app: ms-credit-deployment
+    app: ms-document-deployment
 spec:
   selector:
     matchLabels:
-      app: ms-credit-pod
+      app: ms-document-pod
   replicas: 1
   template:
     metadata:
       labels:
-        app: ms-credit-pod
+        app: ms-document-pod
     spec:
       containers:
-        - name: ms-credit
-          image: nicolassepulvedab/ms-credit-service
+        - name: ms-document
+          image: nicolassepulvedab/ms-document-service
           ports:
-            - containerPort: 8091
+            - containerPort: 8092
           env:
             - name: SERVER_PORT
               value: "0"
@@ -26,7 +26,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_HOST_CREDITS
+                  key: DB_HOST_DOCUMENTS
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
@@ -36,14 +36,16 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_DBNAME_CREDITS
+                  key: DB_DBNAME_DOCUMENTS
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_USER_CREDITS
+                  name: postgres-credentials
+                  key: DB_USER_DOCUMENTS
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_PASSWORD_CREDITS
+                  name: postgres-credentials
+                  key: DB_PASSWORD_DOCUMENTS
+            - name: CONFIG_SERVER_HOST
+              value: "config-service-service"

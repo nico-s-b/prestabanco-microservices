@@ -19,6 +19,9 @@ spec:
           image: nicolassepulvedab/gateway-service
           ports:
             - containerPort: 8081
+          env:
+            - name: CONFIG_SERVER_HOST
+              value: "config-service-service"
 ---
 apiVersion: v1
 kind: Service

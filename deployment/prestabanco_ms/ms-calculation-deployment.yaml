@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ms-document
+  name: ms-calculation
   labels:
-    app: ms-document-deployment
+    app: ms-calculation-deployment
 spec:
   selector:
     matchLabels:
-      app: ms-document-pod
+      app: ms-calculation-pod
   replicas: 1
   template:
     metadata:
       labels:
-        app: ms-document-pod
+        app: ms-calculation-pod
     spec:
       containers:
-        - name: ms-document
-          image: nicolassepulvedab/ms-document-service
+        - name: ms-calculation
+          image: nicolassepulvedab/ms-calculation-service
           ports:
-            - containerPort: 8092
+            - containerPort: 8090
           env:
             - name: SERVER_PORT
               value: "0"
@@ -26,7 +26,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_HOST_DOCUMENTS
+                  key: DB_HOST_CALCULATIONS
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
@@ -36,14 +36,16 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_DBNAME_DOCUMENTS
+                  key: DB_DBNAME_CALCULATIONS
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_USER_DOCUMENTS
+                  name: postgres-credentials
+                  key: DB_USER_CALCULATIONS
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_PASSWORD_DOCUMENTS
+                  name: postgres-credentials
+                  key: DB_PASSWORD_CALCULATIONS
+            - name: CONFIG_SERVER_HOST
+              value: "config-service-service"

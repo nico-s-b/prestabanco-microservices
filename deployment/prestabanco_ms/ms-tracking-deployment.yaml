@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ms-user
+  name: ms-tracking
   labels:
-    app: ms-user-deployment
+    app: ms-tracking-deployment
 spec:
   selector:
     matchLabels:
-      app: ms-user-pod
+      app: ms-tracking-pod
   replicas: 1
   template:
     metadata:
       labels:
-        app: ms-user-pod
+        app: ms-tracking-pod
     spec:
       containers:
-        - name: ms-user
-          image: nicolassepulvedab/ms-user-service
+        - name: ms-tracking
+          image: nicolassepulvedab/ms-tracking-service
           ports:
-            - containerPort: 8095
+            - containerPort: 8094
           env:
             - name: SERVER_PORT
               value: "0"
@@ -26,24 +26,26 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_HOST_USERS
+                  key: DB_HOST_TRACKING
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
                   key: DB_PORT
-            - name: DB_DBNAME
+            - name: DB_DBNAME_TRACKING
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_DBNAME_USERS
+                  key: DB_DBNAME
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_USER_USERS
+                  name: postgres-credentials
+                  key: DB_USER_TRACKING
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
-                  key: DB_PASSWORD_USERS
+                  name: postgres-credentials
+                  key: DB_PASSWORD_TRACKING
+            - name: CONFIG_SERVER_HOST
+              value: "config-service-service"
