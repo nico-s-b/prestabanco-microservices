@@ -22,6 +22,12 @@ spec:
           env:
             - name: CONFIG_SERVER_HOST
               value: "config-service-service"
+            - name: EUREKA_HOST
+              value: "eureka-service-service"
+            - name: EUREKA_PORT
+              value: "8761"
+            - name: INSTANCE_HOSTNAME
+              value: "eureka-service-service"
 ---
 apiVersion: v1
 kind: Service
@@ -31,7 +37,7 @@ metadata:
     app: gateway-service-service
 spec:
   selector:
-    app: gateway-service-deployment
+    app: gateway-service-pod
   ports:
     - protocol: TCP
       port: 8081

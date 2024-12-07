@@ -31,7 +31,7 @@ metadata:
     app: eureka-service-service
 spec:
   selector:
-    app: eureka-service-deployment
+    app: eureka-service-pod
   ports:
     - protocol: TCP
       port: 8081

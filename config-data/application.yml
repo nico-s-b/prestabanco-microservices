@@ -15,8 +15,9 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      default-zone: http://eureka-service:8761/eureka
+      default-zone: http://${EUREKA_HOST:eureka-service-service}:${EUREKA_PORT:8761}/eureka/
   instance:
+    hostname: ${INSTANCE_HOSTNAME:localhost} # localhost para desarrollo, DNS en producción
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 feign:
   discovery:

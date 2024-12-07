@@ -28,7 +28,7 @@ metadata:
     app: config-service-service
 spec:
   selector:
-    app: config-service-deployment
+    app: config-service-pod
   ports:
     - protocol: TCP
       port: 8081
