@@ -18,7 +18,7 @@ spec:
         - name: gateway-service
           image: nicolassepulvedab/gateway-service
           ports:
-            - containerPort: 8081
+            - containerPort: 8082
           env:
             - name: CONFIG_SERVER_HOST
               value: "config-service-service"
@@ -40,6 +40,6 @@ spec:
     app: gateway-service-pod
   ports:
     - protocol: TCP
-      port: 8081
-      targetPort: 8081
+      port: 8082
+      targetPort: 8082
   type: LoadBalancer
