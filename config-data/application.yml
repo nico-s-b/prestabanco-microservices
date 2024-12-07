@@ -17,7 +17,9 @@ eureka:
     service-url:
       default-zone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/
   instance:
+    prefer-ip-address: false
     hostname: ${INSTANCE_HOSTNAME} # localhost para desarrollo, DNS en producción
+    non-secure-port: ${local.server.port} # Registra el puerto dinámico asignado por Spring Boot.
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 feign:
   discovery:
