@@ -19,7 +19,7 @@ eureka:
   instance:
     prefer-ip-address: false
     hostname: ${INSTANCE_HOSTNAME} # localhost para desarrollo, DNS en producción
-    non-secure-port: ${local.server.port} # Registra el puerto dinámico asignado por Spring Boot.
+    non-secure-port: ${local.server.port:${SERVER_PORT:0}} # Registra el puerto dinámico asignado por Spring Boot.
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 feign:
   discovery:

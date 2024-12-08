@@ -17,6 +17,7 @@ management:
         include: "*"
 
 spring:
+  profiles: gateway-service
   cloud:
     gateway:
       discovery:
