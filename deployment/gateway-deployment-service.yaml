@@ -29,7 +29,7 @@ spec:
             - name: INSTANCE_HOSTNAME
               value: "gateway-service-service"
             - name: SERVER_PORT
-              value: "8082"              
+              value: "8082"
             - name: SPRING_PROFILES_ACTIVE
               value: "gateway-service"
 ---

@@ -29,9 +29,10 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: '*' #acá el front
+            allowedOrigins: "http://localhost:5173"
             allowedMethods: "*"
             allowedHeaders: "*"
+            allowCredentials: true
       routes:
         - id: ms-user-service
           uri: lb://USERS
