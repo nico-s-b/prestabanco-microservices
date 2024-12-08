@@ -85,6 +85,6 @@ spec:
       targetPort: 5432
       protocol: TCP
   selector:
-    app: prestabanco-users-deployment
+    app: prestabanco-users-pod
     tier: database
   type: LoadBalancer
