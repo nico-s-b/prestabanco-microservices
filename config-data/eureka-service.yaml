@@ -1,7 +1,9 @@
 server:
   port: ${SERVER_PORT:8761}
 spring:
-  profiles: eureka-service
+  config:
+    activate:
+      on-profile: eureka-service
 eureka:
   client:
     fetch-registry: false
