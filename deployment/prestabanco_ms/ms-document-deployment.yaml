@@ -52,6 +52,19 @@ spec:
             - name: EUREKA_PORT
               value: "8761"
             - name: INSTANCE_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
+              value: ms-document
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-document
+  labels:
+    app: ms-document-deployment
+spec:
+  clusterIP: None
+  selector:
+    app: ms-document-pod
+  ports:
+    - protocol: TCP
+      port: 8080 # Puerto dummy para no afectar puertos dinámicos
+      targetPort: 8080

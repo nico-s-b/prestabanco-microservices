@@ -52,6 +52,19 @@ spec:
             - name: EUREKA_PORT
               value: "8761"
             - name: INSTANCE_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
+              value: ms-calculation
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-calculation
+  labels:
+    app: ms-calculation-deployment
+spec:
+  clusterIP: None
+  selector:
+    app: ms-calculation-pod
+  ports:
+    - protocol: TCP
+      port: 8080 # Puerto dummy para no afectar puertos dinámicos
+      targetPort: 8080

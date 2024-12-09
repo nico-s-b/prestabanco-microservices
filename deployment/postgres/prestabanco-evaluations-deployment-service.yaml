@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: prestabanco-evaluations-pv
+  name: db-evaluations-pv
   labels:
     type: local
 spec:
@@ -11,12 +11,12 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data/prestabanco-evaluations-data"
+    path: "/data/db-evaluations-data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: prestabanco-evaluations-pvc
+  name: db-evaluations-pvc
   labels:
     app: postgres
     tier: database
@@ -31,25 +31,24 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prestabanco-evaluations
+  name: db-evaluations
   labels:
-    app: prestabanco-evaluations-deployment
+    app: db-evaluations-deployment
     tier: database
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: prestabanco-evaluations-pod
-  strategy:
-    type: Recreate
+      app: db-evaluations-pod
   template:
     metadata:
       labels:
-        app: prestabanco-evaluations-pod
+        app: db-evaluations-pod
         tier: database
     spec:
       containers:
-        - name: prestabanco-evaluations
-          image: postgres
+        - name: db-evaluations
+          image: postgres:16
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
@@ -66,18 +65,36 @@ spec:
                   key: DB_PASSWORD_EVALUATIONS
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: prestabanco-evaluations-data
+              name: db-evaluations-data
+            - mountPath: /docker-entrypoint-initdb.d
+              name: init-scripts
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - |
+                    export PGPASSWORD="$POSTGRES_PASSWORD"
+                    until pg_isready -U "$POSTGRES_USER" -h "localhost"; do
+                      echo "$(date): Esperando a que PostgreSQL esté listo..."
+                      sleep 2
+                    done
+                    psql -U "$POSTGRES_USER" -h localhost -d postgres -f /docker-entrypoint-initdb.d/init.sql || true    
       volumes:
-        - name: prestabanco-evaluations-data
+        - name: db-evaluations-data
           persistentVolumeClaim:
-            claimName: prestabanco-evaluations-pvc
+            claimName: db-evaluations-pvc
+        - name: init-scripts
+          configMap:
+            name: prestabanco-evaluations-init-scripts
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: prestabanco-evaluations-service
+  name: db-evaluations-service
   labels:
-    app: prestabanco-evaluations-service
+    app: db-evaluations-service
     tier: database
 spec:
   ports:
@@ -85,6 +102,6 @@ spec:
       targetPort: 5432
       protocol: TCP
   selector:
-    app: prestabanco-evaluations-pod
+    app: db-evaluations-pod
     tier: database
   type: LoadBalancer

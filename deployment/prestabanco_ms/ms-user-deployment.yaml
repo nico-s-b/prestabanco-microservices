@@ -52,6 +52,19 @@ spec:
             - name: EUREKA_PORT
               value: "8761"
             - name: INSTANCE_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
+              value: ms-user
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-user
+  labels:
+    app: ms-user-deployment
+spec:
+  clusterIP: None
+  selector:
+    app: ms-user-pod
+  ports:
+    - protocol: TCP
+      port: 8080 # Puerto dummy para no afectar puertos dinámicos
+      targetPort: 8080
