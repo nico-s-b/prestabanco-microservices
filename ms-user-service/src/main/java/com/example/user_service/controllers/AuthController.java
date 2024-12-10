@@ -1,11 +1,11 @@
 package com.example.user_service.controllers;
 
-import com.example.user_service.entities.Excecutive;
+import com.example.user_service.entities.Executive;
 import com.example.user_service.services.ClientService;
 import com.example.user_service.entities.Client;
 import com.example.common_utils.configurations.JwtUtil;
 import com.example.user_service.dtos.LoginRequest;
-import com.example.user_service.services.ExcecutiveService;
+import com.example.user_service.services.ExecutiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,27 +27,46 @@ public class AuthController {
     private ClientService clientService;
 
     @Autowired
-    private ExcecutiveService excecutiveService;
+    private ExecutiveService executiveService;
 
     @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Object user = authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
+    @PostMapping("/clients/login")
+    public ResponseEntity<?> loginClient(@RequestBody LoginRequest loginRequest) {
+        Client client = clientService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
 
-        if (user != null) {
-            String token = jwtUtil.generateToken(getEmail(user));
+        if (client != null) {
+            String token = jwtUtil.generateToken(client.getEmail());
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
-            response.put("userId", String.valueOf(getId(user)));
-            response.put("userType", user instanceof Client ? "CLIENT" : "EXECUTIVE");
-            response.put("name", getName(user));
+            response.put("userId", String.valueOf(client.getId()));
+            response.put("userType", "CLIENT");
+            response.put("name", client.getName());
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         }
     }
+
+
+    @PostMapping("/executives/login")
+    public ResponseEntity<?> loginExecutive(@RequestBody LoginRequest loginRequest) {
+        Executive executive = executiveService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+
+        if (executive != null) {
+            String token = jwtUtil.generateToken(executive.getEmail());
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            response.put("userId", String.valueOf(executive.getId()));
+            response.put("userType", "EXECUTIVE");
+            response.put("name", executive.getName());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+        }
+    }
+
 
     @GetMapping("/current-user")
     public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
@@ -78,39 +97,20 @@ public class AuthController {
         return ResponseEntity.ok("Logout exitoso");
     }
 
-    private Object authenticateUser(String email, String password) {
-        // Intenta autenticar como Cliente
-        Client client = clientService.authenticate(email, password);
-        if (client != null) {
-            return client;
-        }
-        // Intenta autenticar como Ejecutivo
-        return excecutiveService.authenticate(email, password);
-    }
-
     private Object findUserByEmail(String email) {
         // Busca primero en Clientes, luego en Ejecutivos
         Client client = clientService.getByEmail(email);
         if (client != null) {
             return client;
         }
-        return excecutiveService.getByEmail(email);
-    }
-
-    private String getEmail(Object user) {
-        if (user instanceof Client) {
-            return ((Client) user).getEmail();
-        } else if (user instanceof Excecutive) {
-            return ((Excecutive) user).getEmail();
-        }
-        throw new IllegalArgumentException("Tipo de usuario no soportado");
+        return executiveService.getByEmail(email);
     }
 
     private Long getId(Object user) {
         if (user instanceof Client) {
             return ((Client) user).getId();
-        } else if (user instanceof Excecutive) {
-            return ((Excecutive) user).getId();
+        } else if (user instanceof Executive) {
+            return ((Executive) user).getId();
         }
         throw new IllegalArgumentException("Tipo de usuario no soportado");
     }
@@ -118,8 +118,8 @@ public class AuthController {
     private String getName(Object user) {
         if (user instanceof Client) {
             return ((Client) user).getName();
-        } else if (user instanceof Excecutive) {
-            return ((Excecutive) user).getName();
+        } else if (user instanceof Executive) {
+            return ((Executive) user).getName();
         }
         throw new IllegalArgumentException("Tipo de usuario no soportado");
     }
