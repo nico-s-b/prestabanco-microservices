@@ -26,4 +26,5 @@ public class CreditTrack {
     private int docsUploaded;
     private LocalDateTime lastUpdateDate;
     private Long executiveId;
+    private String message;
 }

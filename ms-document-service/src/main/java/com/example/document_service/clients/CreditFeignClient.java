@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(value = "CREDITS",
-        path = "/api/v1/credit",
+        path = "/api/v1/credits",
         configuration = {FeignClientConfig.class})
 public interface CreditFeignClient {
 

@@ -39,16 +39,18 @@ public class DocumentService {
 
     public DocumentEntity save(DocumentEntity document, CreditType creditType){
         document.setUploadDate(LocalDateTime.now());
-
         Long creditId = document.getCreditId();
+        DocumentEntity savedDoc = documentRepository.save(document);
+        callDocsUpdate(creditType, creditId);
+        return savedDoc;
+    }
 
+    private void callDocsUpdate(CreditType creditType, Long creditId){
         DocumentUpdateDTO notification = new DocumentUpdateDTO();
         notification.setCreditId(creditId);
         notification.setCreditType(creditType);
         notification.setDocumentTypes(getDocumentTypesByCreditId(creditId));
         trackingFeignClient.documentsUpdated(notification);
-
-        return documentRepository.save(document);
     }
 
     public DocumentEntity create(Long creditId, String documentType, MultipartFile fileData) throws IOException {
@@ -88,10 +90,12 @@ public class DocumentService {
         return documentTypes;
     }
 
-    public boolean delete(Long id) throws Exception {
+    public void delete(Long id) throws Exception {
         try{
+            DocumentEntity document = getById(id);
+            CreditRequest credit = creditFeignClient.getById(document.getCreditId());
             documentRepository.deleteById(id);
-            return true;
+            callDocsUpdate(CreditType.valueOf(credit.getCreditType()), credit.getId());
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }

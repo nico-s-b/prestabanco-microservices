@@ -24,11 +24,7 @@ public class CreditController {
     @GetMapping("/{id}")
     public ResponseEntity<Credit> getById(@PathVariable Long id) {
         Credit credit = creditService.getById(id);
-        if (credit != null) {
-            return ResponseEntity.ok(credit);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(credit);
     }
 
     @GetMapping("/{clientId}/credits")
@@ -55,12 +51,8 @@ public class CreditController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) throws Exception {
-        var isDeleted = creditService.deleteCredit(id);
-        if (isDeleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        creditService.deleteCredit(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/request")

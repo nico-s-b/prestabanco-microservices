@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value = "EVALUATION",
-        path = "/api/v1/eval",
+        path = "/api/v1/evals",
         configuration = {FeignClientConfig.class})
 public interface EvaluationFeignClient {
     @PostMapping

@@ -27,21 +27,13 @@ public class DocumentController {
     @GetMapping("/{id}")
     public ResponseEntity<DocumentEntity> getById(@PathVariable Long id) {
         DocumentEntity document = documentService.getById(id);
-        if (document != null) {
-            return ResponseEntity.ok(document);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(document);
     }
 
     @GetMapping("/credit/{id}")
     public ResponseEntity<List<DocumentEntity>> getDocumentsByCreditId(@PathVariable Long id) {
         List<DocumentEntity> documents = documentService.getDocumentsByCreditId(id);
-        if (!documents.isEmpty()) {
-            return ResponseEntity.ok(documents);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(documents);
     }
 
     @PutMapping("/")
@@ -54,15 +46,10 @@ public class DocumentController {
         return ResponseEntity.ok(savedDocument);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDocumentById(@PathVariable Long id) throws Exception {
-        var isDeleted = documentService.delete(id);
-        if (isDeleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        documentService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/missing")
