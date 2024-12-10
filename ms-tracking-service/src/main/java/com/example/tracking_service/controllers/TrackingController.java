@@ -44,4 +44,12 @@ public class TrackingController {
         trackingService.updateCreditState(creditId, CreditState.valueOf(state));
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("updateComments/{creditId}")
+    public ResponseEntity<Void> updateComments(@PathVariable Long creditId,
+                                               @RequestParam String comments,
+                                                @RequestParam String state) {
+        trackingService.updateCreditWithComments(creditId, CreditState.valueOf(state), comments);
+        return ResponseEntity.ok().build();
+    }
 }

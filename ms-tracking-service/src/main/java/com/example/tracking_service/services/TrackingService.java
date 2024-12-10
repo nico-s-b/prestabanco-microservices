@@ -93,4 +93,11 @@ public class TrackingService {
         tracking.setDocsUploaded(0);
         trackingRepository.save(tracking);
     }
+
+    public void updateCreditWithComments(Long creditId, CreditState creditState, String comments) {
+        CreditTrack track = trackingRepository.findByCreditId(creditId);
+        track.setState(creditState);
+        track.setMessage(comments);
+        trackingRepository.save(track);
+    }
 }

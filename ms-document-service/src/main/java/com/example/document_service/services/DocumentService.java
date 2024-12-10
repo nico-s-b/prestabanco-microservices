@@ -23,19 +23,12 @@ import java.util.Optional;
 
 @Service
 public class DocumentService {
-
     @Autowired
     DocumentRepository documentRepository;
-
     @Autowired
     CreditFeignClient creditFeignClient;
-
     @Autowired
     TrackingFeignClient trackingFeignClient;
-
-    public List<DocumentEntity> getAll(){
-        return (List<DocumentEntity>) documentRepository.findAll();
-    }
 
     public DocumentEntity save(DocumentEntity document, CreditType creditType){
         document.setUploadDate(LocalDateTime.now());
@@ -51,6 +44,10 @@ public class DocumentService {
         notification.setCreditType(creditType);
         notification.setDocumentTypes(getDocumentTypesByCreditId(creditId));
         trackingFeignClient.documentsUpdated(notification);
+    }
+
+    public List<DocumentEntity> getAll(){
+        return (List<DocumentEntity>) documentRepository.findAll();
     }
 
     public DocumentEntity create(Long creditId, String documentType, MultipartFile fileData) throws IOException {
