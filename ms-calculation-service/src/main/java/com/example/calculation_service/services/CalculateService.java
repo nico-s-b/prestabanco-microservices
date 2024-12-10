@@ -8,6 +8,7 @@ import com.example.common_utils.enums.CreditType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,7 +94,8 @@ public class CalculateService {
 
     public TotalCosts calculate(CreditRequest credit) {
         TotalCosts costs = new TotalCosts();
-
+        costs.setCreditId(credit.getId());
+        costs.setCalculationDate(LocalDateTime.now());
         costs.setInstallment(getCreditInstallment(credit));
         costs.setCreditInsurance((int) ( costs.getInstallment() * 0.003 ));
         costs.setFireInsurance(20000);
@@ -113,4 +115,9 @@ public class CalculateService {
         save(totalCosts);
         return totalCosts;
     }
+
+    public TotalCosts getTotalCostByCreditId (Long creditId) {
+        return totalCostRepository.findByCreditId(creditId);
+    }
+
 }

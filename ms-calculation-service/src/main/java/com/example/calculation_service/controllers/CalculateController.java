@@ -5,11 +5,9 @@ import com.example.calculation_service.entities.TotalCosts;
 import com.example.common_utils.dtos.CreditRequest;
 import com.example.calculation_service.services.CalculateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +29,7 @@ public class CalculateController {
 
     @PostMapping("/total")
     public ResponseEntity<TotalCosts> total(@RequestBody CreditRequest request) {
+        System.out.println(request);
         if (request.getCreditType() == null) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -44,5 +43,12 @@ public class CalculateController {
         return ResponseEntity.ok(restrictions);
     }
 
-
+    @GetMapping("/{creditId}")
+    public ResponseEntity<TotalCosts> getTotalCostsByCreditId(@PathVariable Long creditId) {
+        TotalCosts totals = calculateService.getTotalCostByCreditId(creditId);
+        if (totals == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(totals);
+    }
 }
