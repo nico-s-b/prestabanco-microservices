@@ -22,7 +22,9 @@ minikube start --driver=docker
 minikube tunnel
 ```
 8. Una vez completo este paso, debiera ser posible acceder al frontend, backend, bases de datos y servidor de eureka mediante las siguientes direcciones y puertos:
--Frontend: 127.0.0.1:80
--Backend: 127.0.0.1:8082
--Bases de datos: 127.0.0.1:5432
--Eureka: 127.0.0.1:8761
+<ul>
+<li>Frontend: 127.0.0.1:80</li>
+<li>Backend: 127.0.0.1:8082</li>
+<li>Bases de datos: 127.0.0.1:5432</li>
+<li>Eureka: 127.0.0.1:8761</li>
+</ul>
