@@ -2,7 +2,6 @@ package com.example.evaluation_service.services;
 
 import com.example.evaluation_service.clients.ClientFeignClient;
 import com.example.common_utils.dtos.ClientDTO;
-import com.example.common_utils.dtos.CreditRequest;
 import com.example.evaluation_service.entities.ClientAccount;
 import com.example.common_utils.*;
 import com.example.evaluation_service.repositories.ClientAccountRepository;

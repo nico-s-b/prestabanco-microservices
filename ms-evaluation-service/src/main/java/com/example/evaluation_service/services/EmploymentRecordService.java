@@ -2,7 +2,6 @@ package com.example.evaluation_service.services;
 
 import com.example.evaluation_service.clients.CreditFeignClient;
 import com.example.common_utils.dtos.CreditRequest;
-import com.example.evaluation_service.entities.CreditRecord;
 import com.example.evaluation_service.entities.EmploymentRecord;
 import com.example.evaluation_service.repositories.EmploymentRecordRepository;
 import org.hibernate.sql.exec.ExecutionException;
@@ -56,7 +55,7 @@ public class EmploymentRecordService {
         if (employmentRecord.getIsEmployee()) {
             return employmentRecord.getMonthlyIncome();
         }else{
-            return employmentRecord.getLastTwoYearIncome() / 24;
+            return employmentRecord.getLastTwoYearMonthlyIncome() / 24;
         }
     }
 

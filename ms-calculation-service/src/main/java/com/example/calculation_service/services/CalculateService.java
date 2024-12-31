@@ -80,10 +80,11 @@ public class CalculateService {
 
     public List<Integer> simulateCreditInstallments(CreditRequest credit) {
         CreditType type = CreditType.valueOf(credit.getCreditType());
+        float requestedRate = credit.getAnnualRate();
         credit.setAnnualRate(getMinAnnualRate(type));
         int minInstallment = getCreditInstallment(credit);
 
-        credit.setAnnualRate(credit.getAnnualRate());
+        credit.setAnnualRate(requestedRate);
         int requestedInstallment = getCreditInstallment(credit);
 
         credit.setAnnualRate(getMaxAnnualRate(type));

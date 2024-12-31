@@ -22,6 +22,7 @@ public class EmploymentRecord {
     private Boolean isWorking;
     private Boolean isEmployee;
     private ZonedDateTime currentWorkStartDate;
+    private ZonedDateTime lastWorkEndDate;
     private int monthlyIncome;
-    private int lastTwoYearIncome;
+    private int lastTwoYearMonthlyIncome;
 }
