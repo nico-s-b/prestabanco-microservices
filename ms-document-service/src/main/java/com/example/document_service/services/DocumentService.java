@@ -38,6 +38,15 @@ public class DocumentService {
         return savedDoc;
     }
 
+    public void replace(Long id, MultipartFile fileData) throws IOException {
+        DocumentEntity document = documentRepository.findById(id).orElse(null);
+        document.setUploadDate(LocalDateTime.now());
+        document.setFileName(fileData.getOriginalFilename());
+        byte[] fileBytes = fileData.getBytes();
+        document.setFileData(fileBytes);
+        documentRepository.save(document);
+    }
+
     private void callDocsUpdate(CreditType creditType, Long creditId){
         DocumentUpdateDTO notification = new DocumentUpdateDTO();
         notification.setCreditId(creditId);
@@ -64,6 +73,7 @@ public class DocumentService {
         DocumentEntity document = new DocumentEntity();
         byte[] fileBytes = fileData.getBytes();
         document.setFileData(fileBytes);
+        document.setFileName(fileData.getOriginalFilename());
         document.setDocumentType(DocumentType.valueOf(documentType));
         document.setCreditId(creditId);
         return save(document, creditType);

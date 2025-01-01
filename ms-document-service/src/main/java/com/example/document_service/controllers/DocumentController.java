@@ -41,9 +41,16 @@ public class DocumentController {
             @RequestParam("id") Long creditId,
             @RequestParam("documentType") String documentType,
             @RequestParam("fileData") MultipartFile fileData) throws IOException {
-
         DocumentEntity savedDocument = documentService.create(creditId, documentType, fileData);
         return ResponseEntity.ok(savedDocument);
+    }
+
+    @PutMapping("/replace")
+    public ResponseEntity<Void> update(
+            @RequestParam("id") Long id,
+            @RequestParam("fileData") MultipartFile fileData) throws IOException {
+        documentService.replace(id, fileData);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

@@ -32,4 +32,5 @@ public class DocumentEntity {
     private byte[] fileData;
 
     private LocalDateTime uploadDate;
+    private String fileName;
 }
