@@ -2,8 +2,6 @@ package com.example.evaluation_service.services;
 
 import com.example.evaluation_service.clients.CreditFeignClient;
 import com.example.common_utils.dtos.CreditRequest;
-import com.example.evaluation_service.entities.EmploymentRecord;
-import com.example.evaluation_service.repositories.EmploymentRecordRepository;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

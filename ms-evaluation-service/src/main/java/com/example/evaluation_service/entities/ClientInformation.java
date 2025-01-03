@@ -5,24 +5,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmploymentRecord {
+public class ClientInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
 
-    private Long clientid;
-
-    private Boolean isWorking;
-    private Boolean isEmployee;
-    private ZonedDateTime currentWorkStartDate;
-    private ZonedDateTime lastWorkEndDate;
     private int monthlyIncome;
-    private int lastTwoYearMonthlyIncome;
+    private int totalDebt;
+    private LocalDateTime lastDebtDate;
+    private Boolean isDependentWorker;
+    private LocalDateTime lastJobStartDate;
+    private LocalDateTime lastJobEndDate;
+    private int lastTwoYearIncome;
+    private int accountBalance;
+    private LocalDateTime accountStartDate;
 }

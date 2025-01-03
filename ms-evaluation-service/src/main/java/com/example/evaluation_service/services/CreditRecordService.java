@@ -1,11 +1,6 @@
 package com.example.evaluation_service.services;
 
-import com.example.evaluation_service.clients.CreditFeignClient;
 import com.example.common_utils.dtos.CreditRequest;
-import com.example.evaluation_service.entities.ClientAccount;
-import com.example.evaluation_service.repositories.CreditRecordRepository;
-import com.example.evaluation_service.entities.CreditRecord;
-import com.example.evaluation_service.entities.EmploymentRecord;
 //import com.example.evaluation_service.entities.Credit;
 import com.example.evaluation_service.repositories.CreditRecordRepository;
 import org.hibernate.sql.exec.ExecutionException;

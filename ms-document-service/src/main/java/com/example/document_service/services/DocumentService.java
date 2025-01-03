@@ -39,6 +39,9 @@ public class DocumentService {
     }
 
     public void replace(Long id, MultipartFile fileData) throws IOException {
+        if (!fileData.getContentType().equals("application/pdf")) {
+            throw new IOException("Solo se permiten archivos en formato PDF");
+        }
         DocumentEntity document = documentRepository.findById(id).orElse(null);
         document.setUploadDate(LocalDateTime.now());
         document.setFileName(fileData.getOriginalFilename());
@@ -60,6 +63,10 @@ public class DocumentService {
     }
 
     public DocumentEntity create(Long creditId, String documentType, MultipartFile fileData) throws IOException {
+        if (!fileData.getContentType().equals("application/pdf")) {
+            throw new IOException("Solo se permiten archivos en formato PDF");
+        }
+
         CreditType creditType;
         try {
             CreditRequest credit = creditFeignClient.getById(creditId);

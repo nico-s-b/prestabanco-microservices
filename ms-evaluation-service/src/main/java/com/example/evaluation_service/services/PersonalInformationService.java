@@ -3,8 +3,6 @@ package com.example.evaluation_service.services;
 import com.example.common_utils.dtos.ClientDTO;
 import com.example.evaluation_service.clients.ClientFeignClient;
 import com.example.common_utils.dtos.CreditRequest;
-import com.example.evaluation_service.entities.PersonalInformation;
-import com.example.evaluation_service.repositories.PersonalInformationRepository;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
