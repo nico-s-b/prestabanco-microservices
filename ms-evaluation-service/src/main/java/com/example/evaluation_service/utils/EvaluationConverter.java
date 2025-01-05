@@ -1,39 +1,33 @@
 package com.example.evaluation_service.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.example.common_utils.enums.EvaluationStatus;
+import com.example.evaluation_service.entities.ClientEvaluation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import java.util.HashMap;
-import java.util.Map;
 
 @Converter
-public class EvaluationConverter implements AttributeConverter<Map<String, Object>, String> {
+public class EvaluationConverter implements AttributeConverter<ClientEvaluation.Evaluation, String> {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(Map<String, Object> attribute) {
-        if (attribute == null) {
-            return null;
-        }
+    public String convertToDatabaseColumn(ClientEvaluation.Evaluation evaluation) {
         try {
-            return objectMapper.writeValueAsString(attribute);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error al convertir el mapa a JSON", e);
+            // Convierte el objeto `Evaluation` a una representación JSON como `String`
+            return objectMapper.writeValueAsString(evaluation);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al convertir la evaluación a JSON", e);
         }
     }
 
     @Override
-    public Map<String, Object> convertToEntityAttribute(String dbData) {
-        if (dbData == null || dbData.isEmpty()) {
-            return new HashMap<>();
-        }
+    public ClientEvaluation.Evaluation convertToEntityAttribute(String dbData) {
         try {
-            return objectMapper.readValue(dbData, new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error al convertir el JSON a mapa", e);
+            // Convierte la representación JSON (String) a un objeto `Evaluation`
+            return objectMapper.readValue(dbData, ClientEvaluation.Evaluation.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al convertir JSON a evaluación", e);
         }
     }
 }

@@ -37,10 +37,28 @@ public class CalculateController {
         return ResponseEntity.ok(totalcosts);
     }
 
+    @GetMapping("/installment")
+    public ResponseEntity<Integer> getInstallment(@RequestBody CreditRequest request) {
+        if (request.getCreditType() == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        int installment = calculateService.getCreditInstallment(request);
+        return ResponseEntity.ok(installment);
+    }
+
     @PostMapping("/restrictions")
     public ResponseEntity<CreditRestrictionsDTO> getRestrictions(@RequestBody CreditRequest request) {
         CreditRestrictionsDTO restrictions = calculateService.calculateRestrictions(request);
         return ResponseEntity.ok(restrictions);
+    }
+
+    @GetMapping("/maxFinancing")
+    public ResponseEntity<Integer> getMaxFinancing(@RequestBody CreditRequest request) {
+        if (request.getCreditType() == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        int maxF = calculateService.getMaxFinancingMount(request);
+        return ResponseEntity.ok(maxF);
     }
 
     @GetMapping("/{creditId}")

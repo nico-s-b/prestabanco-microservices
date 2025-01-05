@@ -1,39 +1,43 @@
 package com.example.evaluation_service.controllers;
 
-import com.example.evaluation_service.services.ClientAccountService;
-import com.example.evaluation_service.services.CreditRecordService;
-import com.example.evaluation_service.services.EmploymentRecordService;
-import com.example.evaluation_service.services.PersonalInformationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.evaluation_service.dtos.EvaluationDTO;
+import com.example.evaluation_service.entities.ClientEvaluation;
+import com.example.evaluation_service.services.*;
+import com.example.evaluation_service.utils.EvaluationMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/v1/evals")
+@RestController
+@RequestMapping("/api/v1/evals")
 public class EvaluationController {
 
-    private final ClientAccountService clientAccountService;
-    private final CreditRecordService creditRecordService;
-    private final EmploymentRecordService employmentRecordService;
-    private final PersonalInformationService personalInformationService;
+    private final ClientEvaluationService clientEvaluationService;
 
-    public EvaluationController(ClientAccountService clientAccountService,
-                                CreditRecordService creditRecordService,
-                                EmploymentRecordService employmentRecordService) {
-        this.clientAccountService = clientAccountService;
-        this.creditRecordService = creditRecordService;
-        this.employmentRecordService = employmentRecordService;
-        this.personalInformationService = new PersonalInformationService();
+    public EvaluationController(ClientEvaluationService clientEvaluationService) {
+        this.clientEvaluationService = clientEvaluationService;
     }
 
+    @GetMapping("/{creditId}")
+    public ResponseEntity<EvaluationDTO> getEvaluation(@PathVariable Long creditId) {
+        ClientEvaluation clientEvaluation = clientEvaluationService.getByCreditId(creditId);
+        EvaluationDTO evaluationDTO = EvaluationMapper.toDTO(clientEvaluation.getEvaluation());
+        return ResponseEntity.ok(evaluationDTO);
+    }
+
+    @PutMapping("/{creditId}")
+    public ResponseEntity<Void> updateEvaluation(
+            @PathVariable Long creditId,
+            @RequestBody EvaluationDTO evaluationDTO) {
+        clientEvaluationService.update(creditId, evaluationDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    //Se crea en conjunto con cada nuevo crédito
     @PostMapping
-    public ResponseEntity<String> createRecords(@RequestParam Long id) {
-        clientAccountService.create(id);
-        creditRecordService.create(id);
-        employmentRecordService.create(id);
-        personalInformationService.create(id);
-        return ResponseEntity.ok("Records created");
+    public ResponseEntity<Void> createEvaluation(@RequestParam Long clientId, @RequestParam Long creditId) {
+        clientEvaluationService.create(clientId, creditId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

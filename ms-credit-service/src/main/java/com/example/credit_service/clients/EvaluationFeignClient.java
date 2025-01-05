@@ -1,4 +1,4 @@
-package com.example.user_service.clients;
+package com.example.credit_service.clients;
 
 import com.example.common_utils.configurations.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestParam;
         configuration = {FeignClientConfig.class})
 public interface EvaluationFeignClient {
     @PostMapping
-    String createRecords(@RequestParam Long id);
+    Void createEvaluation(@RequestParam Long clientId, @RequestParam Long creditId);
 }

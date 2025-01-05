@@ -1,6 +1,5 @@
 package com.example.user_service.services;
 
-import com.example.user_service.clients.EvaluationFeignClient;
 import com.example.user_service.entities.Client;
 import com.example.user_service.repositories.ClientRepository;
 import org.hibernate.sql.exec.ExecutionException;
@@ -15,9 +14,6 @@ public class ClientService {
 
     @Autowired
     ClientRepository clientRepository;
-
-    @Autowired
-    EvaluationFeignClient evaluationFeignClient;
 
     public List<Client> getAll() {
         return clientRepository.findAll();
@@ -36,16 +32,7 @@ public class ClientService {
         if (client.getId() != null && !clientRepository.existsById(client.getId())) {
             throw new ExecutionException("Client not found for this id :: " + client.getId());
         }
-        Client savedClient = clientRepository.save(client);
-        if (client.getId() == null) {
-            try{
-                evaluationFeignClient.createRecords(savedClient.getId());
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
-        return savedClient;
+        return clientRepository.save(client);
     }
 
 

@@ -67,6 +67,9 @@ public class CalculateService {
         return restrictions;
     }
 
+    public int calculateMaxFinancingMount(CreditRequest request) {
+        return getMaxFinancingMount(request);
+    }
 
     //Método para obtener la cuota mensual de un crédito dado sus parámetros
     public int getCreditInstallment(CreditRequest credit){

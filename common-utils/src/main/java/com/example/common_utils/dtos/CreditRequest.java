@@ -17,4 +17,5 @@ public class CreditRequest {
     private int propertyValue;
     private float annualRate;
     private LocalDateTime requestDate;
+    private Long clientId;
 }

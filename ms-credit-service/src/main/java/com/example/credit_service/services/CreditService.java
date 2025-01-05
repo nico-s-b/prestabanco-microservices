@@ -3,9 +3,9 @@ package com.example.credit_service.services;
 import com.example.common_utils.dtos.TrackingRequest;
 import com.example.credit_service.clients.ClientFeignClient;
 import com.example.common_utils.dtos.ClientDTO;
+import com.example.credit_service.clients.EvaluationFeignClient;
 import com.example.credit_service.clients.TrackingFeignClient;
 import com.example.credit_service.entities.Credit;
-import com.example.common_utils.enums.CreditState;
 import com.example.common_utils.enums.CreditType;
 import com.example.credit_service.repositories.CreditRepository;
 import com.example.common_utils.dtos.CreditRequest;
@@ -29,6 +29,9 @@ public class CreditService {
     @Autowired
     TrackingFeignClient trackingFeignClient;
 
+    @Autowired
+    EvaluationFeignClient evaluationFeignClient;
+
     public ArrayList<Credit> getAll(){
         return (ArrayList<Credit>) creditRepository.findAll();
     }
@@ -40,15 +43,17 @@ public class CreditService {
         trackingRequest.setCreditId(savedCredit.getId());
         trackingRequest.setLastUpdateDate(LocalDateTime.now());
         try {
-            System.out.println(trackingRequest);
             trackingFeignClient.createTracking(trackingRequest);
         } catch (Exception e) {
             throw new ExecutionException("Error al crear el tracking para el crédito");
         }
+        try {
+            evaluationFeignClient.createEvaluation(savedCredit.getClientId(), savedCredit.getId());
+        } catch (Exception e) {
+            throw new ExecutionException("Error al crear el evaluacion para el credito");
+        }
         return savedCredit;
     }
-
-
 
     public Credit getById(Long id){
         Optional<Credit> optionalRecord = creditRepository.findById(id);

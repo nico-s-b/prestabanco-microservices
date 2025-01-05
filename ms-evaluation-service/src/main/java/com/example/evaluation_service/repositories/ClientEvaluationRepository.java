@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClientEvaluationRepository extends JpaRepository<ClientEvaluation, Long> {
     ClientEvaluation findByClientId(Long id);
+    ClientEvaluation findByCreditId(Long id);
 }

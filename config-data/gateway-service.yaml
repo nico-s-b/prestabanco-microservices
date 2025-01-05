@@ -59,7 +59,7 @@ spring:
         - id: ms-evaluation-service
           uri: lb://EVALUATION
           predicates:
-            - Path=/api/v1/evals/**
+            - Path=/api/v1/evals/**,/api/v1/info/**
         - id: ms-calculation-service
           uri: lb://CALCULATION
           predicates:
