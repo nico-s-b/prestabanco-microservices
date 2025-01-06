@@ -9,6 +9,7 @@ import com.example.credit_service.entities.Credit;
 import com.example.common_utils.enums.CreditType;
 import com.example.credit_service.repositories.CreditRepository;
 import com.example.common_utils.dtos.CreditRequest;
+import jakarta.transaction.Transactional;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,23 +37,29 @@ public class CreditService {
         return (ArrayList<Credit>) creditRepository.findAll();
     }
 
-    public Credit save(Credit credit){
+    @Transactional
+    public Credit save(Credit credit) {
         Credit savedCredit = creditRepository.save(credit);
 
         TrackingRequest trackingRequest = new TrackingRequest();
         trackingRequest.setCreditId(savedCredit.getId());
         trackingRequest.setLastUpdateDate(LocalDateTime.now());
-        try {
-            trackingFeignClient.createTracking(trackingRequest);
-        } catch (Exception e) {
-            throw new ExecutionException("Error al crear el tracking para el crédito");
-        }
-        try {
-            evaluationFeignClient.createEvaluation(savedCredit.getClientId(), savedCredit.getId());
-        } catch (Exception e) {
-            throw new ExecutionException("Error al crear el evaluacion para el credito");
-        }
+
+        trackingFeignClient.createTracking(trackingRequest);
+        evaluationFeignClient.create(savedCredit.getClientId(), savedCredit.getId());
+
         return savedCredit;
+    }
+
+    @Transactional
+    public Credit create(CreditRequest request, Long clientId) {
+        ClientDTO client = clientFeignClient.getById(clientId);
+        if (client == null) {
+            throw new RuntimeException("Client not found");
+        }
+
+        Credit credit = buildCredit(request, clientId);
+        return save(credit);
     }
 
     public Credit getById(Long id){
@@ -62,16 +69,6 @@ public class CreditService {
 
     public ArrayList<Credit>  getByClientId(Long id){
         return (ArrayList<Credit>) creditRepository.findAllByClientId(id);
-    }
-
-    public Credit create(CreditRequest request, Long clientId) {
-        ClientDTO client = clientFeignClient.getById(clientId);;
-        if (client == null) {
-            throw new ExecutionException("Client not found");
-        }
-
-        Credit credit = buildCredit(request, clientId);
-        return save(credit);
     }
 
     public boolean deleteCredit(Long id) throws Exception {

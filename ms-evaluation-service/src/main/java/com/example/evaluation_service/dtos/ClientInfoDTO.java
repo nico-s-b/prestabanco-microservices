@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalDate ;
 
 @Data
 @AllArgsConstructor
@@ -14,11 +15,11 @@ public class ClientInfoDTO {
     private Long clientId;
     private int monthlyIncome;
     private int totalDebt;
-    private LocalDateTime lastDebtDate;
+    private LocalDate lastDebtDate;
     private Boolean isEmployee;
-    private LocalDateTime currentJobStartDate;
-    private LocalDateTime lastJobEndDate;
+    private LocalDate  currentJobStartDate;
+    private LocalDate  lastJobEndDate;
     private int lastTwoYearIncome;
     private int accountBalance;
-    private LocalDateTime accountStartDate;
+    private LocalDate  accountStartDate;
 }

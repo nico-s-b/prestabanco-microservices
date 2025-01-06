@@ -20,6 +20,12 @@ public class InformationController {
     }
 
     @PostMapping
+    public ResponseEntity<Void> create(@RequestParam Long clientId){
+        clientInformationService.create(clientId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/save")
     public ResponseEntity<Void> saveOrUpdate(@RequestBody ClientInfoDTO clientInfo) {
         clientInformationService.saveOrUpdate(clientInfo);
         return ResponseEntity.ok().build();
@@ -30,4 +36,5 @@ public class InformationController {
         clientInformationService.delete(clientId);
         return ResponseEntity.ok().build();
     }
+
 }

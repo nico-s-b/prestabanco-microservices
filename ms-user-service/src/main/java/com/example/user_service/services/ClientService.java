@@ -1,5 +1,6 @@
 package com.example.user_service.services;
 
+import com.example.user_service.clients.InformationFeignClient;
 import com.example.user_service.entities.Client;
 import com.example.user_service.repositories.ClientRepository;
 import org.hibernate.sql.exec.ExecutionException;
@@ -14,6 +15,8 @@ public class ClientService {
 
     @Autowired
     ClientRepository clientRepository;
+    @Autowired
+    InformationFeignClient informationFeignClient;
 
     public List<Client> getAll() {
         return clientRepository.findAll();
@@ -29,12 +32,21 @@ public class ClientService {
     public Client getByEmail(String email) {return clientRepository.findByEmail(email);}
 
     public Client saveOrUpdate(Client client) {
+        // Validar si es una actualización y el cliente no existe
         if (client.getId() != null && !clientRepository.existsById(client.getId())) {
             throw new ExecutionException("Client not found for this id :: " + client.getId());
         }
-        return clientRepository.save(client);
-    }
+        Client savedClient = clientRepository.save(client);
 
+        if (client.getId() == null) { // Si no tiene ID, es un nuevo cliente
+            try {
+                informationFeignClient.create(savedClient.getId());
+            } catch (Exception e) {
+                throw new ExecutionException("Failed to create ClientInformation for clientId :: " + savedClient.getId(), e);
+            }
+        }
+        return savedClient;
+    }
 
     public boolean deleteById(Long id) throws Exception {
         try{

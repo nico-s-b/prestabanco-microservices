@@ -1,5 +1,6 @@
 package com.example.evaluation_service.services;
 
+import com.example.common_utils.dtos.ClientDTO;
 import com.example.evaluation_service.clients.ClientFeignClient;
 import com.example.evaluation_service.dtos.ClientInfoDTO;
 import com.example.evaluation_service.entities.ClientInformation;
@@ -22,8 +23,16 @@ public class ClientInformationService {
         return clientInformationRepository.findByClientId(clientId);
     }
 
+    public void create(Long clientId) {
+        ClientInformation clientInformation = new ClientInformation();
+        clientInformation.setClientId(clientId);
+        clientInformationRepository.save(clientInformation);
+    }
+
     public void saveOrUpdate(ClientInfoDTO clientInfoDTO) {
-        if (clientFeignClient.getById(clientInfoDTO.getClientId()) == null) {
+        Long clientId = clientInfoDTO.getClientId();
+        ClientDTO client = clientFeignClient.getById(clientId);;
+        if (client == null) {
             throw new RuntimeException("Client not found");
         }
         ClientInformation existingClientInfo = clientInformationRepository.findByClientId(clientInfoDTO.getClientId());

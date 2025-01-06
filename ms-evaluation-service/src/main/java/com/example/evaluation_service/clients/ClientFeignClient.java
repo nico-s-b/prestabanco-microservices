@@ -6,12 +6,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "CLIENTS",
+@FeignClient(value = "USERS",
         path = "/api/v1/clients",
         configuration = {FeignClientConfig.class})
 public interface ClientFeignClient {
 
     @GetMapping("/{id}")
     ClientDTO getById(@PathVariable Long id);
-
 }

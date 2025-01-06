@@ -37,7 +37,7 @@ public class CalculateController {
         return ResponseEntity.ok(totalcosts);
     }
 
-    @GetMapping("/installment")
+    @PostMapping("/installment")
     public ResponseEntity<Integer> getInstallment(@RequestBody CreditRequest request) {
         if (request.getCreditType() == null) {
             return ResponseEntity.badRequest().body(null);
@@ -52,7 +52,7 @@ public class CalculateController {
         return ResponseEntity.ok(restrictions);
     }
 
-    @GetMapping("/maxFinancing")
+    @PostMapping("/maxFinancing")
     public ResponseEntity<Integer> getMaxFinancing(@RequestBody CreditRequest request) {
         if (request.getCreditType() == null) {
             return ResponseEntity.badRequest().body(null);

@@ -2,6 +2,9 @@ package com.example.evaluation_service.dtos;
 
 import com.example.common_utils.enums.EvaluationStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,23 +33,20 @@ public class EvaluationDTO {
     private EvaluationStatus R6;
 
     @JsonProperty("R7")
-    private EvaluationStatus[] R7;
+    private EvaluationStatus R7;
 
-    // Constructor personalizado para inicializar valores por defecto
-    public static EvaluationDTO defaultEvaluation() {
-        return new EvaluationDTO(
-            EvaluationStatus.PENDING,
-            EvaluationStatus.PENDING,
-            EvaluationStatus.PENDING,
-            EvaluationStatus.PENDING,
-            EvaluationStatus.PENDING,
-            EvaluationStatus.PENDING,
-            new EvaluationStatus[]{
-                    EvaluationStatus.PENDING,
-                    EvaluationStatus.PENDING,
-                    EvaluationStatus.PENDING,
-                    EvaluationStatus.PENDING,
-                    EvaluationStatus.PENDING}
-        );
-    }
+    @JsonProperty("R7_1")
+    private EvaluationStatus R7_1;
+
+    @JsonProperty("R7_2")
+    private EvaluationStatus R7_2;
+
+    @JsonProperty("R7_3")
+    private EvaluationStatus R7_3;
+
+    @JsonProperty("R7_4")
+    private EvaluationStatus R7_4;
+
+    @JsonProperty("R7_5")
+    private EvaluationStatus R7_5;
 }
