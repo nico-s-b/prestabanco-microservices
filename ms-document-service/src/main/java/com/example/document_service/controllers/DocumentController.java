@@ -49,11 +49,14 @@ public class DocumentController {
     }
 
     @PutMapping("/replace")
-    public ResponseEntity<Void> update(
+    public ResponseEntity<String> update(
             @RequestParam("id") Long id,
             @RequestParam("fileData") MultipartFile fileData) throws IOException {
+        if (fileData.getSize() > 5*1024*1024 ) {
+            return ResponseEntity.badRequest().body("El archivo excede el tamaño máximo permitido de 5 MB.");
+        }
         documentService.replace(id, fileData);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Archivo actualizado correctamente.");
     }
 
     @DeleteMapping("/{id}")
