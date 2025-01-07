@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -52,5 +53,12 @@ public class ClientController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{clientId}/birthdate")
+    public ResponseEntity<LocalDateTime> getByBirthdate(@PathVariable Long clientId) {
+        LocalDateTime birthDate = clientService.getById(clientId).getBirthDate();
+        return ResponseEntity.ok(birthDate);
+    }
+
 
 }

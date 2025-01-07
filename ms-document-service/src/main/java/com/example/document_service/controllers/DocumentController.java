@@ -37,12 +37,15 @@ public class DocumentController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<DocumentEntity> save(
+    public ResponseEntity<String> save(
             @RequestParam("id") Long creditId,
             @RequestParam("documentType") String documentType,
             @RequestParam("fileData") MultipartFile fileData) throws IOException {
+        if (fileData.getSize() > 5*1024*1024 ) {
+            return ResponseEntity.badRequest().body("El archivo excede el tamaño máximo permitido de 5 MB.");
+        }
         DocumentEntity savedDocument = documentService.create(creditId, documentType, fileData);
-        return ResponseEntity.ok(savedDocument);
+        return ResponseEntity.ok("Archivo subido correctamente.");
     }
 
     @PutMapping("/replace")

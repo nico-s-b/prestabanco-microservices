@@ -32,13 +32,14 @@ public class ClientService {
     public Client getByEmail(String email) {return clientRepository.findByEmail(email);}
 
     public Client saveOrUpdate(Client client) {
-        // Validar si es una actualización y el cliente no existe
-        if (client.getId() != null && !clientRepository.existsById(client.getId())) {
+        boolean isNewClient = client.getId() == null;
+
+        if (!isNewClient && !clientRepository.existsById(client.getId())) {
             throw new ExecutionException("Client not found for this id :: " + client.getId());
         }
         Client savedClient = clientRepository.save(client);
 
-        if (client.getId() == null) { // Si no tiene ID, es un nuevo cliente
+        if (isNewClient) {
             try {
                 informationFeignClient.create(savedClient.getId());
             } catch (Exception e) {
@@ -47,6 +48,7 @@ public class ClientService {
         }
         return savedClient;
     }
+
 
     public boolean deleteById(Long id) throws Exception {
         try{
